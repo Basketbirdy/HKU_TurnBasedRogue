@@ -5,11 +5,6 @@ using UnityEngine.Tilemaps;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    [Header("Variables")]
-    [Header("Rooms")]
-    [SerializeField] List<Room> rooms = new List<Room>();
-    [SerializeField] int count;
-
     [Header("Tilemaps")]
     [SerializeField] private Tilemap tilemap;
     [Header("Prefabs")]
@@ -18,31 +13,33 @@ public class DungeonGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) 
-        {
-            Debug.Log("Room_Input received");
-            CreateRoom(Vector2Int.zero, Room.RoomType.empty);
-            count++;
-        }
+        // ( Unnecessary )
+        //if(Input.GetKeyDown(KeyCode.Space)) 
+        //{
+        //    Debug.Log("Room_Input received");
+        //    CreateRoom(Vector2Int.zero, Room.RoomType.empty);
+        //    count++;
+        //}
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            Debug.Log("Room_Input received");
-            CreateRoom(new Vector2Int(0, count * 11), Room.RoomType.empty);
-            count++;
-        }
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    Debug.Log("Room_Input received");
+        //    CreateRoom(new Vector2Int(0, count * 11), Room.RoomType.empty);
+        //    count++;
+        //}
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        foreach (var room in rooms) {
-            Vector3Int gridPos = new Vector3Int(room.gridPos.x, room.gridPos.y, 0);
-            Gizmos.DrawWireCube(gridPos, new Vector3(room.width, room.height, 0)); 
-        }
+        // ( Unnecessary )
+        //Gizmos.color = Color.red;
+        //foreach (var room in rooms) {
+        //    Vector3Int gridPos = new Vector3Int(room.gridPos.x, room.gridPos.y, 0);
+        //    Gizmos.DrawWireCube(gridPos, new Vector3(room.width, room.height, 0)); 
+        //}
     }
 
-    public void CreateRoom(Vector2Int position, Room.RoomType _type)
+    public void DrawRoom(Vector2Int position, Room.RoomType _type)
     {
         string currentName = "";
 
@@ -74,15 +71,17 @@ public class DungeonGenerator : MonoBehaviour
                 break; 
             }
 
-            // Choose what roomtype to generate
-            Room currentRoom = new Room(position, _type, prefab.width, prefab.height); // create a new room
-            rooms.Add(currentRoom); // add room to the list of rooms
+            //// Choose what roomtype to generate ( Unnecessary )
+            //Room currentRoom = new Room(position, _type, prefab.width, prefab.height); // create a new room
+            //rooms.Add(currentRoom); // add room to the list of rooms
 
+            // get tiles to copy
             prefab.tilemap.CompressBounds();
             BoundsInt prefabBounds = prefab.tilemap.cellBounds;
             TileBase[] tileArray = prefab.tilemap.GetTilesBlock(prefabBounds);
             Debug.Log(tileArray.Length);
 
+            // place copied tiles into the world
             tilemap.CompressBounds();
             Vector3Int tilemapPos = new Vector3Int(position.x + -(prefab.width/2), position.y + -(prefab.height / 2), 0);
             BoundsInt tilemapBounds = new BoundsInt(tilemapPos, prefab.tilemap.size);
