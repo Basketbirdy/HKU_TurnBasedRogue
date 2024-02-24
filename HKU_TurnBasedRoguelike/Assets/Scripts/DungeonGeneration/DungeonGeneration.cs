@@ -104,10 +104,10 @@ public class DungeonGeneration : MonoBehaviour
             rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY] = new Room(checkPos, Room.RoomType.empty, 20, 10);
             takenPositions.Insert(0,checkPos);
 
-            Debug.Log("Rooms_Doors: North: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].north);
-            Debug.Log("Rooms_Doors: East: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].east);
-            Debug.Log("Rooms_Doors: South: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].south);
-            Debug.Log("Rooms_Doors: West: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].west);
+            //Debug.Log("Rooms_Doors: North: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].north);
+            //Debug.Log("Rooms_Doors: East: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].east);
+            //Debug.Log("Rooms_Doors: South: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].south);
+            //Debug.Log("Rooms_Doors: West: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].west);
         }
     }
 
@@ -119,7 +119,7 @@ public class DungeonGeneration : MonoBehaviour
         {
             // get a random occupied position
             int index = Mathf.RoundToInt(UnityEngine.Random.value * (takenPositions.Count - 1)); // get random index from the list (random position in the grid)
-            Debug.Log("Index: " + index);
+            //Debug.Log("Index: " + index);
             x = takenPositions[index].x; // set position from index
             y = takenPositions[index].y; // set position from index
 
@@ -153,7 +153,7 @@ public class DungeonGeneration : MonoBehaviour
             {
                 // get a random occupied position
                 index = Mathf.RoundToInt(UnityEngine.Random.value * (takenPositions.Count - 1)); // get random index from the list (random position in the grid)
-                Debug.Log("Index: " + index);
+                //Debug.Log("Index: " + index);
                 increment++;
             }
             while (NumberOfNeighbors(takenPositions[index], takenPositions) > 1 && increment < 100);
@@ -194,7 +194,7 @@ public class DungeonGeneration : MonoBehaviour
         if(takenPositions.Contains(checkingPos + Vector2Int.up)) { sum++; }
         if(takenPositions.Contains(checkingPos + Vector2Int.down)) { sum++; }
 
-        Debug.Log("Amount of neighbors: " +  sum);
+        //Debug.Log("Amount of neighbors: " +  sum);
         return sum;
     }
 
@@ -224,8 +224,8 @@ public class DungeonGeneration : MonoBehaviour
                 if (x + 1 >= gridSizeY * 2) { rooms[x, y].east = false; } // check east
                 else { rooms[x, y].east = rooms[x + 1, y] != null; }
 
-                Debug.Log("Doors; x: " + x + ", y: " + y);
-                Debug.Log("Doors; N: " + rooms[x, y].north + ", E: " + rooms[x,y].east + ", S: " + rooms[x,y].south + ", W: " + rooms[x,y].west);
+                //Debug.Log("Doors; x: " + x + ", y: " + y);
+                //Debug.Log("Doors; N: " + rooms[x, y].north + ", E: " + rooms[x,y].east + ", S: " + rooms[x,y].south + ", W: " + rooms[x,y].west);
             }
         }    
     }
@@ -236,7 +236,7 @@ public class DungeonGeneration : MonoBehaviour
         {
             if (room == null)
             {
-                Debug.Log("room is null");
+                //Debug.Log("room is null");
                 continue;
             }
 
@@ -262,7 +262,7 @@ public class DungeonGeneration : MonoBehaviour
         {
             if (prefab.name != currentName)
             {
-                Debug.LogWarning(prefab.name + " Doesnt match anything.");
+                //Debug.LogWarning(prefab.name + " Doesnt match anything.");
                 break;
             }
 
@@ -274,7 +274,7 @@ public class DungeonGeneration : MonoBehaviour
             prefab.tilemap.CompressBounds();
             BoundsInt prefabBounds = prefab.tilemap.cellBounds;
             TileBase[] tileArray = prefab.tilemap.GetTilesBlock(prefabBounds);
-            Debug.Log(tileArray.Length);
+            //Debug.Log(tileArray.Length);
 
             // place copied tiles into the world
             tilemap.CompressBounds();
@@ -290,7 +290,7 @@ public class DungeonGeneration : MonoBehaviour
         {
             if (room == null)
             {
-                Debug.Log("room is null");
+                //Debug.Log("room is null");
                 continue;
             }
 
@@ -328,29 +328,35 @@ public class DungeonGeneration : MonoBehaviour
 
         if (direction == Corridor.Direction.north)
         {
-            offset = new Vector3Int(room.gridPos.x, room.gridPos.y + (room.height / 2) + 1, 0);
+            offset = Vector3Int.zero;
+            //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
             //offset = new Vector3Int((room.width / 2) + 1,(room.height / 2) + 1, 0);
         }
         if (direction == Corridor.Direction.east)
         {
-            offset = new Vector3Int(room.gridPos.x + (room.width / 2) + 1, room.gridPos.y, 0);
+            offset = Vector3Int.zero;
+            //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
             //offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
         }
         if (direction == Corridor.Direction.south)
         {
-            offset = new Vector3Int(room.gridPos.x, room.gridPos.y - (room.height / 2) + 1, 0);
+            offset = Vector3Int.zero;
+            //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
             //offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
         }
         if (direction == Corridor.Direction.west)
         {
-            offset = new Vector3Int(room.gridPos.x - (room.width / 2) + 1, room.gridPos.y, 0);
+            offset = Vector3Int.zero;
+            //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
             //offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
         }
 
-        Vector3Int drawPos = roomPos + offset;
+        Vector3Int roomWorldPos = new Vector3Int(roomPos.x * room.width, roomPos.y * room.height, 0);
 
-        drawPos.x *= room.width;
-        drawPos.y *= room.height;
+        Vector3Int drawPos = roomWorldPos + offset;
+
+        //drawPos.x *= room.width;
+        //drawPos.y *= room.height;
 
         // draw the right tilemap
         foreach(TilemapClass tilemap in tileMapPrefabs)
@@ -364,14 +370,14 @@ public class DungeonGeneration : MonoBehaviour
             if(tilemap.name == "Corridor_Horizontal")
             {
                 DrawPrefab(drawPos, "Corridor_Horizontal");
-                Debug.Log("Corridors_Tried to draw horizontal corridor");
-                Instantiate(debugRoom, drawPos, Quaternion.identity);
+                //Debug.Log("Corridors_Tried to draw horizontal corridor");
+                //Instantiate(debugRoom, drawPos, Quaternion.identity);
             }
             else if(tilemap.name == "Corridor_Vertical")
             {
                 DrawPrefab(drawPos, "Corridor_Vertical");
-                Debug.Log("Corridors_Tried to draw vertical corridor");
-                Instantiate(debugRoom, drawPos, Quaternion.identity);
+                //Debug.Log("Corridors_Tried to draw vertical corridor");
+                //Instantiate(debugRoom, drawPos, Quaternion.identity);
             }
         }
 
