@@ -7,6 +7,19 @@ public class GameManager : MonoBehaviour
     [Header("StateMachine")]
     [SerializeField] private FSM<GameManager> fsm;
 
+    [Header("References")]
+    [SerializeField] public GameObject playerObj;
+    [SerializeField] public PlayerMovement playerMovement;
+
+    [Header("UI")]
+    [SerializeField] public UIObject[] uiObjects;
+
+    [Header("Debug")]
+    [Header("Data")]
+    [SerializeField] public bool isPaused = false;
+    [Header("Options")]
+    [SerializeField] bool openMainMenu = true;
+
     #region Singleton
 
     public static GameManager instance;
@@ -27,15 +40,26 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         fsm = new FSM<GameManager>(this);
-        fsm.ChangeState(typeof(MainMenuState<GameManager>));
+
+        if (openMainMenu) { fsm.ChangeState(typeof(MainMenuState<GameManager>)); }
+        else { fsm.ChangeState(typeof(PlayingState<GameManager>)); }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.G)) 
-        {
-            fsm.ChangeState(typeof(PlayingState<GameManager>));
-        }
+        if(Input.GetKeyDown(KeyCode.Escape)) { PauseGame(); }
+    }
+
+    public void StartGame()
+    {
+        fsm.ChangeState(typeof(PlayingState<GameManager>));
+    }
+
+    public void PauseGame()
+    {
+        if(!isPaused) { fsm.ChangeState(typeof(PauseState<GameManager>)); }
+        else { StartGame(); }
+        
     }
 }

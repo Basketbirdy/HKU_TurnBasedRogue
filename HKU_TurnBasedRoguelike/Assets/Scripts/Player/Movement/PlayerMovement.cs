@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -18,15 +19,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Tilemap tilemap;
     [Header("Player")]
     [SerializeField] GameObject spriteObj;
+    [Header("Scripts")]
+    [SerializeField] PlayerCombat playerCombat;
+    [Header("UI")]
+    [SerializeField] GameObject selectionIndicator;
+    [SerializeField] SpriteRenderer indicatorRenderer;
+    [SerializeField] Color positiveIndicator;
+    [SerializeField] Color negativeIndicator;
+    [Space]
+    [SerializeField] ParticleSystem trailParticles;
 
 
     [Header("Debug")]
     [SerializeField] Vector3Int currentTile;
-    Vector3 targetPos;
+    public Vector3 targetPos;
 
-    [SerializeField] bool canMove = true;
-    [SerializeField] bool isTurn = false;
     [SerializeField] int turnIndex;
+
+    [Header("States")]
+    [SerializeField] bool isMoving = false;
+    [SerializeField] bool isTurn = false;
+    [SerializeField] public bool canMove = true;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
         CheckTurn();
     }
 
+
     // Update is called once per frame
     void Update()
     {
@@ -48,6 +62,15 @@ public class PlayerMovement : MonoBehaviour
 
         // move player to target position
         transform.position = Vector2.MoveTowards(transform.position, targetPos, movementSpeed * Time.deltaTime);
+
+        if(isMoving)
+        {
+            if(transform.position == targetPos)
+            {
+                isMoving = false;
+                ParticleUtils.TriggerSystem(trailParticles, false);
+            }
+        }
     }
 
     private void OnEnable()
@@ -73,10 +96,27 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetInput()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse0) && canMove && isTurn)
+        // get mouse position
+        Vector3 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int closestCell = TileUtils.GetCellPosition(tilemap, clickPos);
+
+        selectionIndicator.transform.position = TileUtils.GetWorldCellPosition(tilemap, closestCell);
+
+        if((!canMove || !isTurn) && selectionIndicator.activeSelf == true) { selectionIndicator.SetActive(false); }
+        else if((canMove && isTurn) && selectionIndicator.activeSelf == false) { selectionIndicator.SetActive(true); }
+
+        if(MoveCheck(closestCell, movementRange, false))
+        {
+            indicatorRenderer.color = positiveIndicator;
+        }
+        else
+        {
+            indicatorRenderer.color = negativeIndicator;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canMove && isTurn)
         {
             // get clicked cell
-            Vector3 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Debug.Log("Clicked at: " + clickPos);
 
             // get clicked cell
@@ -84,10 +124,10 @@ public class PlayerMovement : MonoBehaviour
             TileBase clickedCell = tilemap.GetTile(cellPos);
 
             // check if the cell is within range
-            if (MoveCheck(cellPos, movementRange))
+            if (MoveCheck(cellPos, movementRange, true))
             {
                 MoveToCell(cellPos);
-                TurnManager.instance.Advanceturn(1);
+                TurnManager.instance.AdvanceTurn(1);
             }
             else
             {
@@ -107,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public bool MoveCheck(Vector3Int _cellPos, int range)
+    public bool MoveCheck(Vector3Int _cellPos, int range, bool shouldAttack)
     {
         // cellPos is the selected cell
         // _checkPos is the cell that is being checked
@@ -128,20 +168,32 @@ public class PlayerMovement : MonoBehaviour
 
         //check if there are enemies or objects on the tile
         Collider2D[] obstacles =  Physics2D.OverlapBoxAll(new Vector2(_cellPos.x + tilemap.cellSize.x / 2, _cellPos.y + tilemap.cellSize.y / 2), Vector2.one * 0.1f, obstaclesMask);
-        Debug.Log(obstacles.Length);
+        //Debug.Log(obstacles.Length);
 
         // if there are obstacles
-        if(obstacles.Length != 0)
-        {
+        if(obstacles.Length != 0) 
+        { 
             state = false;
 
+            if (!shouldAttack) { return state; }
+            foreach (Collider2D obstacle in obstacles) 
+            { 
+                // if the obstacle isn't an enemy
+                if(obstacle.gameObject.layer != 7) { continue; }
+
+                playerCombat.DealDamage(obstacle.gameObject);
+            }
         }
+
 
         return state;
     }
 
     public void MoveToCell(Vector3Int targetTile)
     {
+        isMoving = true;
+        ParticleUtils.TriggerSystem(trailParticles, true);
+
         // get target position
         targetPos = TileUtils.GetWorldCellPosition(tilemap, targetTile);
 
@@ -165,4 +217,6 @@ public class PlayerMovement : MonoBehaviour
             
         Debug.Log("Turns; triggered CheckTurn function");
     }
+
+
 }

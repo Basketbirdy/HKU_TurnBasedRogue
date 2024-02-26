@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -11,8 +12,8 @@ TagManager:
   - Obstacle
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Enemy
   - 
   - 
   - 
@@ -40,4 +41,22 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Dungeon
+    uniqueID: 1305237121
+    locked: 0
+  - name: Obstacles
+    uniqueID: 755008423
+    locked: 0
+  - name: WorldSpaceUI
+    uniqueID: 1063655911
+    locked: 0
+  - name: Particles
+    uniqueID: 25234423
+    locked: 0
+  - name: Enemies
+    uniqueID: 2184001187
+    locked: 0
+  - name: Player
+    uniqueID: 360597541
     locked: 0

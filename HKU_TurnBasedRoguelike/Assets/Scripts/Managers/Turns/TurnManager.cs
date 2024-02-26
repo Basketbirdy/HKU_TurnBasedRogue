@@ -41,21 +41,26 @@ public class TurnManager : MonoBehaviour
 
     }
 
-    public void Advanceturn(int amount)
+    public void AdvanceTurn(int amount)
     {
+
         Debug.Log("Turns; starting index: " + activeIndex);
         Debug.Log("Turns; turn affected objects: " + turnAffectedObj.Count);
 
         int newAmount = activeIndex + amount;
+        int maxIndex = turnAffectedObj.Count;
 
-        if(newAmount > turnAffectedObj.Count - 1)
+        if(newAmount >= maxIndex)
         {
-            newAmount = newAmount - ((turnAffectedObj.Count - 1) - activeIndex) - 1;
+            newAmount = newAmount - maxIndex;
 
-            activeIndex = 0;
+            activeIndex = newAmount;
+        }
+        else
+        {
+            activeIndex = newAmount;
         }
 
-        activeIndex = activeIndex + newAmount;
         Debug.Log("Turns; Active index: " + activeIndex);
 
         onAdvanceTurn?.Invoke();
@@ -69,6 +74,11 @@ public class TurnManager : MonoBehaviour
     public void RemoveFromList(GameObject obj)
     {
         turnAffectedObj.Remove(obj);
+    }
+
+    public List<GameObject> GetList()
+    {
+        return turnAffectedObj;
     }
 
     public int ReturnObjIndex(GameObject obj)

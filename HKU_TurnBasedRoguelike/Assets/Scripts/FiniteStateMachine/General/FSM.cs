@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class FSM<T>
+public class FSM<T> where T : GameManager
 {
-    public T Owner;
+    public T owner;
 
     public Dictionary<Type, State<T>> states;
     private State<T> currentState;
 
     public FSM(T owner)
     {
-        this.Owner = owner;
+        this.owner = owner;
         states = new Dictionary<Type, State<T>>();
 
         // Add instances of all classes that inherit from type State.
         states.Add(typeof(MainMenuState<T>), new MainMenuState<T>(this));
         states.Add(typeof(PlayingState<T>), new PlayingState<T>(this));
+        states.Add(typeof(PauseState<T>), new PauseState<T>(this));
 
         currentState = null;
     }
