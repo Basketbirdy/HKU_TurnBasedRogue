@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseState<T> : State<T> where T : GameManager
+public class PauseState : State<GameManager>
 {
-    FSM<T> fsm;
+    GameFSM fsm;
 
-    public PauseState(FSM<T> fsm) : base(fsm)
+    public PauseState(GameFSM fsm) : base(fsm)
     {
         this.fsm = fsm;
     }

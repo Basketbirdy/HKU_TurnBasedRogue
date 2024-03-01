@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.UI;
 
-public class MainMenuState<T> : State<T> where T : GameManager
+public class MainMenuState : State<GameManager>
 {
-    FSM<T> fsm;
+    GameFSM fsm;
 
-    public MainMenuState(FSM<T> fsm) : base(fsm)
+    public MainMenuState(GameFSM fsm) : base(fsm)
     {
         this.fsm = fsm;
     }
@@ -25,7 +26,7 @@ public class MainMenuState<T> : State<T> where T : GameManager
 
     public override void Execute()
     {
-        
+
     }
 
     public override void Exit()

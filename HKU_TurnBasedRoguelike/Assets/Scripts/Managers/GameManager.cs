@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [Header("StateMachine")]
-    [SerializeField] private FSM<GameManager> fsm;
+    [SerializeField] private GameFSM fsm;
 
     [Header("References")]
     [SerializeField] public GameObject playerObj;
@@ -39,27 +39,29 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        fsm = new FSM<GameManager>(this);
+        fsm = new GameFSM(this);
 
-        if (openMainMenu) { fsm.ChangeState(typeof(MainMenuState<GameManager>)); }
-        else { fsm.ChangeState(typeof(PlayingState<GameManager>)); }
+        if (openMainMenu) { fsm.ChangeState(typeof(MainMenuState)); }
+        else { fsm.ChangeState(typeof(PlayingState)); }
     }
 
     // Update is called once per frame
     void Update()
     {
+        // call statemachine update
+        fsm.Update();
+
         if(Input.GetKeyDown(KeyCode.Escape)) { PauseGame(); }
     }
 
     public void StartGame()
     {
-        fsm.ChangeState(typeof(PlayingState<GameManager>));
+        fsm.ChangeState(typeof(PlayingState));
     }
 
     public void PauseGame()
     {
-        if(!isPaused) { fsm.ChangeState(typeof(PauseState<GameManager>)); }
+        if(!isPaused) { fsm.ChangeState(typeof(PauseState)); }
         else { StartGame(); }
-        
     }
 }

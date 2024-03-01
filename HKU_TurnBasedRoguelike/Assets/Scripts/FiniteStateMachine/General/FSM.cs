@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class FSM<T> where T : GameManager
+public class FSM<T>
 {
     public T owner;
 
@@ -15,21 +15,17 @@ public class FSM<T> where T : GameManager
         this.owner = owner;
         states = new Dictionary<Type, State<T>>();
 
-        // Add instances of all classes that inherit from type State.
-        states.Add(typeof(MainMenuState<T>), new MainMenuState<T>(this));
-        states.Add(typeof(PlayingState<T>), new PlayingState<T>(this));
-        states.Add(typeof(PauseState<T>), new PauseState<T>(this));
-
         currentState = null;
     }
 
+    // call this function inside of owner |-- IMPRORTANT!! --|
     public void Update()
     {
         currentState?.Execute();
     }
 
     public void ChangeState(Type newStateType)
-    {
+    { 
         currentState?.Exit();
         currentState = states[newStateType];
         currentState?.Enter();

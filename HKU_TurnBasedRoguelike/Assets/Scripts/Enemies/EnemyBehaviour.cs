@@ -8,6 +8,7 @@ public class EnemyBehaviour : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Enemy enemyData;
+    private EnemyFSM fsm;
 
     public float hp;
 
@@ -17,13 +18,16 @@ public class EnemyBehaviour : MonoBehaviour
     [Space]
     public float defenseMultiplier;
     [Header("States")]
-    [SerializeField] bool isTurn = false;
+    [SerializeField] internal bool isTurn = false;
     [Space]
     [SerializeField] int turnIndex;
 
     // Start is called before the first frame update
     void Start()
     {
+        fsm = new EnemyFSM(this);
+        fsm.ChangeState(typeof(EnemyIdle));
+
         hp = enemyData.maxHp;
         damageMultiplier = enemyData.damageMultiplier;
         defenseMultiplier = enemyData.defenseMultiplier;
@@ -32,7 +36,7 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        fsm.Update();
     }
 
     private void OnEnable()

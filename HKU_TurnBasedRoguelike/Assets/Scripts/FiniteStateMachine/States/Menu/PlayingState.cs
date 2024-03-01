@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayingState<T> : State<T> where T : GameManager
+public class PlayingState : State<GameManager>
 {
-    FSM<T> fsm;
+    GameFSM fsm;
 
-    public PlayingState(FSM<T> fsm) : base(fsm)
+    public PlayingState(GameFSM fsm) : base(fsm)
     {
         this.fsm = fsm;
+        
     }
 
     public override void Enter()
@@ -28,3 +29,26 @@ public class PlayingState<T> : State<T> where T : GameManager
 
     }
 }
+
+// Very basic generics use
+
+//public class test<T>
+//{
+//    public T Value { get; set; }
+
+//    public void afdsfd()
+//    {
+//        if(Value.GetType() == typeof(int))
+//        {
+
+//        }
+//    }
+//}
+
+//public class testINT : test<int>
+//{
+//   public void blah()
+//    {
+//        int math = Value + 5;
+//    }
+//}

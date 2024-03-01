@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public abstract class State<T> where T : GameManager
+public abstract class State<T>
 {
     private FSM<T> fsm;
 
