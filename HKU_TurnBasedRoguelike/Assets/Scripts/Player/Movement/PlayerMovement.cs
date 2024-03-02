@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 isMoving = false;
                 ParticleUtils.TriggerSystem(trailParticles, false);
+                TurnManager.instance.AdvanceTurn(1);
             }
         }
     }
@@ -130,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
             if (MoveCheck(cellPos, movementRange, true))
             {
                 MoveToCell(cellPos);
-                TurnManager.instance.AdvanceTurn(1);
+                isMoving = true;
             }
             else
             {
@@ -221,5 +222,8 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Turns; triggered CheckTurn function");
     }
 
-
+    public Vector3Int GetCurrentCellPosition()
+    {
+        return currentTile;
+    }
 }

@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c82b78841a680a41a25306d82c65007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  proximity: {fileID: 0}
+  proximity: {fileID: 229658468}
   minDamage: 60
   maxDamage: 120
   damageMultiplier: 1
@@ -877,10 +877,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: e879aa743a8163043a2e76b193295310, type: 2}
   hp: 0
+  currentCell: {x: 0, y: 0, z: 0}
+  targetCell: {x: 0, y: 0, z: 0}
   damageMultiplier: 1
   defenseMultiplier: 1
   isTurn: 0
+  processingTurn: 0
   turnIndex: 0
+  turnAffectedObjects: []
 --- !u!1 &448775301
 GameObject:
   m_ObjectHideFlags: 0
@@ -7370,10 +7374,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: e879aa743a8163043a2e76b193295310, type: 2}
   hp: 0
+  currentCell: {x: 0, y: 0, z: 0}
+  targetCell: {x: 0, y: 0, z: 0}
   damageMultiplier: 1
   defenseMultiplier: 1
   isTurn: 0
+  processingTurn: 0
   turnIndex: 0
+  turnAffectedObjects: []
 --- !u!61 &1900267210
 BoxCollider2D:
   m_ObjectHideFlags: 0

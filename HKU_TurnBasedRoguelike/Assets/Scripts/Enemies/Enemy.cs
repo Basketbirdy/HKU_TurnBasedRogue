@@ -10,7 +10,11 @@ public class Enemy : ScriptableObject
     public string description;
 
     [Header("Enemy data")]
+    [Header("Movement")]
+    public int movementRange = 1;
+    public float movementSpeed = 8;
     [Header("Combat")]
+    public float attackRange = 1;
     public float minDamage = 60;
     public float maxDamage = 120;
     public float damageMultiplier = 1f;

@@ -3,30 +3,49 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class EnemyBehaviour : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] Enemy enemyData;
+    [SerializeField] internal Enemy enemyData;
     private EnemyFSM fsm;
+    internal GameObject player;
+    internal Tilemap tilemap; 
 
     public float hp;
 
     [Header("Enemy data")]
+    [Header("Movement")]
+    [SerializeField] internal Vector3Int currentCell;
+    [SerializeField] internal Vector3Int targetCell;
+
     [Header("Combat")]
     public float damageMultiplier;
     [Space]
     public float defenseMultiplier;
+
     [Header("States")]
     [SerializeField] internal bool isTurn = false;
+    [SerializeField] internal bool processingTurn = false;
     [Space]
     [SerializeField] int turnIndex;
+
+    [Header("turn")]
+    [SerializeField] internal List<GameObject> turnAffectedObjects;
 
     // Start is called before the first frame update
     void Start()
     {
         fsm = new EnemyFSM(this);
         fsm.ChangeState(typeof(EnemyIdle));
+
+        player = FindObjectOfType<PlayerMovement>().gameObject;
+        tilemap = FindObjectOfType<Tilemap>();
+
+        currentCell = TileUtils.GetCellPosition(tilemap, transform.position);
+        targetCell = currentCell;
+        Debug.Log("enemyMovement; targetCell: " + targetCell);
 
         hp = enemyData.maxHp;
         damageMultiplier = enemyData.damageMultiplier;
@@ -37,7 +56,14 @@ public class EnemyBehaviour : MonoBehaviour
     void Update()
     {
         fsm.Update();
+
+        if(transform.position != targetCell)
+        {
+           MoveEnemy();
+        }
+
     }
+
 
     private void OnEnable()
     {
@@ -47,6 +73,11 @@ public class EnemyBehaviour : MonoBehaviour
     private void OnDisable()
     {
         TurnManager.onAdvanceTurn -= CheckTurn;
+    }
+
+    private void MoveEnemy()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, TileUtils.GetWorldCellPosition(tilemap, targetCell), enemyData.movementSpeed * Time.deltaTime);
     }
 
     public void TakeDamage(float damage)
@@ -86,6 +117,8 @@ public class EnemyBehaviour : MonoBehaviour
         {
             isTurn = false;
         }
+
+        currentCell = TileUtils.GetCellPosition(tilemap, transform.position);
 
         Debug.Log("Turns; triggered CheckTurn function");
     }

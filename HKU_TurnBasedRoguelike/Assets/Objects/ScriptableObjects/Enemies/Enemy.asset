@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: debug
   description: A simple debug enemy
+  movementRange: 1
+  movementSpeed: 8
   minDamage: 60
   maxDamage: 120
   damageMultiplier: 1
