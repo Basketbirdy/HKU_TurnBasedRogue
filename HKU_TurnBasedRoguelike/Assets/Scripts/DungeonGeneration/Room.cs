@@ -10,7 +10,7 @@ public class Room
 
     [Header("Room data")]
     public RoomType type;
-    public enum RoomType { start, end, boss, item , empty}
+    public enum RoomType { start, end, boss, item , empty, shop}
 
     public int width; // Width of the room
     public int height; // Height of the room

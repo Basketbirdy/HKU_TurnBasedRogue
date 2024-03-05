@@ -41,6 +41,7 @@ public class DungeonGeneration : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] GameObject debugRoom;
+    [SerializeField] bool spawnDebugCorridors;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +60,10 @@ public class DungeonGeneration : MonoBehaviour
 
         Debug.Log(rooms.Length);
 
+        SpawnFinalChamber();
+
+        SpawnShopChamber();
+
         SetRoomDoors(); // set the door states of each room
 
         DrawMap(); // draw the dungeon
@@ -68,9 +73,9 @@ public class DungeonGeneration : MonoBehaviour
 
     private void CreateRooms()
     {
-        rooms = new Room[worldGridRadius.x * 2, worldGridRadius.y * 2]; // Create room array according to grid size
+        rooms = new Room[(worldGridRadius.x * 2) + 2, (worldGridRadius.y * 2) + 2]; // Create room array according to grid size
 
-        rooms[gridSizeX, gridSizeY] = new Room(Vector2Int.zero, Room.RoomType.empty, 20, 10); // create room at the center of the grid
+        rooms[gridSizeX, gridSizeY] = new Room(Vector2Int.zero, Room.RoomType.start, 20, 10); // create room at the center of the grid
         takenPositions.Insert(0, Vector2Int.zero); // add room to occupancy list
         Vector2Int checkPos = Vector2Int.zero; // create room to use as reference position while determining next room
 
@@ -248,7 +253,7 @@ public class DungeonGeneration : MonoBehaviour
             drawPos.y *= roomheight + 1;
 
             // Spawn the room 
-            DrawPrefab(drawPos, "Room_Empty");
+            DrawPrefab(drawPos, room.type.ToString());
 
         }
     }
@@ -263,7 +268,7 @@ public class DungeonGeneration : MonoBehaviour
             if (prefab.name != currentName)
             {
                 //Debug.LogWarning(prefab.name + " Doesnt match anything.");
-                break;
+                continue;
             }
 
             //// Choose what roomtype to generate ( Unnecessary )
@@ -281,74 +286,37 @@ public class DungeonGeneration : MonoBehaviour
             Vector3Int tilemapPos = new Vector3Int(_gridPos.x + -(prefab.width / 2), _gridPos.y + -(prefab.height / 2), 0);
             BoundsInt tilemapBounds = new BoundsInt(tilemapPos, prefab.tilemap.size);
             tilemap.SetTilesBlock(tilemapBounds, tileArray);
+
+            // place gameobjects in world
         }
     }
-
-    public void CreateCorridors()
-    {
-        foreach (Room room in rooms)
-        {
-            if (room == null)
-            {
-                //Debug.Log("room is null");
-                continue;
-            }
-
-            // get corridors
-            List<Corridor> corridors = GetCorridors(room);
-
-            foreach (Corridor corridor in corridors)
-            {
-                // get room grid positions 
-                Vector3Int roomPos = new Vector3Int(room.gridPos.x, room.gridPos.y, 0);
-                
-                if(corridor.direction == Corridor.Direction.north)
-                {
-                    DrawCorridor(room, roomPos, corridor.direction);
-                }
-                if(corridor.direction == Corridor.Direction.east)
-                {
-                    DrawCorridor(room, roomPos, corridor.direction);
-                }
-                if(corridor.direction == Corridor.Direction.south)
-                {
-                    DrawCorridor(room, roomPos, corridor.direction);
-                }
-                if(corridor.direction == Corridor.Direction.west)
-                {
-                    DrawCorridor(room, roomPos, corridor.direction);
-                }
-            }
-        }
-    }
-
     private void DrawCorridor(Room room, Vector3Int roomPos, Corridor.Direction direction)
     {
         Vector3Int offset = Vector3Int.zero;
 
         if (direction == Corridor.Direction.north)
         {
-            offset = Vector3Int.zero;
+            //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            //offset = new Vector3Int((room.width / 2) + 1,(room.height / 2) + 1, 0);
+            offset = new Vector3Int((room.width / 2) + 1,(room.height / 2) + 1, 0);
         }
         if (direction == Corridor.Direction.east)
         {
-            offset = Vector3Int.zero;
+            //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            //offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
+            offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
         }
         if (direction == Corridor.Direction.south)
         {
-            offset = Vector3Int.zero;
+            //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            //offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
+            offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
         }
         if (direction == Corridor.Direction.west)
         {
-            offset = Vector3Int.zero;
+            //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            //offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
+            offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
         }
 
         Vector3Int roomWorldPos = new Vector3Int(roomPos.x * room.width, roomPos.y * room.height, 0);
@@ -369,18 +337,62 @@ public class DungeonGeneration : MonoBehaviour
             // Spawn the corridor
             if(tilemap.name == "Corridor_Horizontal")
             {
-                DrawPrefab(drawPos, "Corridor_Horizontal");
-                //Debug.Log("Corridors_Tried to draw horizontal corridor");
-                //Instantiate(debugRoom, drawPos, Quaternion.identity);
+                if (spawnDebugCorridors)
+                {
+                    //DrawPrefab(drawPos, "Corridor_Horizontal");
+                    //Debug.Log("Corridors_Tried to draw horizontal corridor");
+                    Instantiate(debugRoom, drawPos, Quaternion.identity);
+                }
             }
             else if(tilemap.name == "Corridor_Vertical")
             {
-                DrawPrefab(drawPos, "Corridor_Vertical");
-                //Debug.Log("Corridors_Tried to draw vertical corridor");
-                //Instantiate(debugRoom, drawPos, Quaternion.identity);
+                if (spawnDebugCorridors)
+                {
+                    //DrawPrefab(drawPos, "Corridor_Vertical");
+                    //Debug.Log("Corridors_Tried to draw vertical corridor");
+                    Instantiate(debugRoom, drawPos, Quaternion.identity);
+                }
             }
         }
 
+    }
+
+    public void CreateCorridors()
+    {
+        foreach (Room room in rooms)
+        {
+            if (room == null)
+            {
+                //Debug.Log("room is null");
+                continue;
+            }
+
+            // get corridors
+            List<Corridor> corridors = GetCorridors(room);
+
+            foreach (Corridor corridor in corridors)
+            {
+                // get room grid positions 
+                Vector3Int roomPos = new Vector3Int(room.gridPos.x, room.gridPos.y, 0);
+
+                if (corridor.direction == Corridor.Direction.north)
+                {
+                    DrawCorridor(room, roomPos, corridor.direction);
+                }
+                if (corridor.direction == Corridor.Direction.east)
+                {
+                    DrawCorridor(room, roomPos, corridor.direction);
+                }
+                if (corridor.direction == Corridor.Direction.south)
+                {
+                    DrawCorridor(room, roomPos, corridor.direction);
+                }
+                if (corridor.direction == Corridor.Direction.west)
+                {
+                    DrawCorridor(room, roomPos, corridor.direction);
+                }
+            }
+        }
     }
 
     private List<Corridor> GetCorridors(Room _room)
@@ -405,5 +417,99 @@ public class DungeonGeneration : MonoBehaviour
         }
 
         return allCorridors;
+    }
+
+    private void SpawnFinalChamber()
+    {
+        // get random room
+        Vector2Int finalChamberConnectionPos = takenPositions[Mathf.RoundToInt(UnityEngine.Random.value * (takenPositions.Count - 1))];
+
+        // get new room position
+        Vector2Int finalChamberPos = Vector2Int.zero;
+
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.left)) {}
+        else if(finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.left;
+        }
+
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.right)) { }
+        else if (finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.right;
+        }
+
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.up)) { }
+        else if(finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.up;
+        }
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.down)) {}
+        else if(finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.down;
+        }
+
+        Debug.Log("Final chamber pos: " + finalChamberPos);
+
+        // add room to the room list
+        if (finalChamberPos != Vector2Int.zero)
+        {
+            Vector2Int pos = new Vector2Int(Mathf.RoundToInt(MathF.Abs(finalChamberPos.x)), Mathf.RoundToInt(MathF.Abs(finalChamberPos.y)));
+
+            rooms[pos.x, pos.y] = new Room(finalChamberPos, Room.RoomType.end, 20, 10);
+            Debug.Log("final room position is: " + finalChamberPos.x + " , " + finalChamberPos.y);
+        }
+        else
+        {
+            Debug.LogWarning("No final chamber position found");
+        }
+    }
+
+    private void SpawnShopChamber()
+    {
+        // get random room
+        Vector2Int finalChamberConnectionPos = takenPositions[Mathf.RoundToInt(UnityEngine.Random.value * (takenPositions.Count - 1))];
+
+        // get new room position
+        Vector2Int finalChamberPos = Vector2Int.zero;
+
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.left)) { }
+        else if (finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.left;
+        }
+
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.right)) { }
+        else if (finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.right;
+        }
+
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.up)) { }
+        else if (finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.up;
+        }
+        if (takenPositions.Contains(finalChamberConnectionPos + Vector2Int.down)) { }
+        else if (finalChamberPos == Vector2Int.zero)
+        {
+            finalChamberPos = finalChamberConnectionPos + Vector2Int.down;
+        }
+
+        Debug.Log("Final chamber pos: " + finalChamberPos);
+
+        // add room to the room list
+        if (finalChamberPos != Vector2Int.zero)
+        {
+            Vector2Int pos = new Vector2Int(Mathf.RoundToInt(MathF.Abs(finalChamberPos.x)), Mathf.RoundToInt(MathF.Abs(finalChamberPos.y)));
+
+            rooms[pos.x, pos.y] = new Room(finalChamberPos, Room.RoomType.shop, 20, 10);
+            Debug.Log("final room position is: " + finalChamberPos.x + " , " + finalChamberPos.y);
+        }
+        else
+        {
+            Debug.LogWarning("No final chamber position found");
+        }
     }
 }
