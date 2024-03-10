@@ -13,5 +13,6 @@ public class GameFSM : FSM<GameManager>
         states.Add(typeof(MainMenuState), new MainMenuState(this));
         states.Add(typeof(PlayingState), new PlayingState(this));
         states.Add(typeof(PauseState), new PauseState(this));
+        states.Add(typeof(GameOverState), new GameOverState(this));
     }
 }

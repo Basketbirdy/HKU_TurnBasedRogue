@@ -102,14 +102,14 @@ public class PlayerMovement : MonoBehaviour
     {
         // get mouse position
         Vector3 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int closestCell = TileUtils.GetCellPosition(tilemap, clickPos);
+        Vector3Int closestCellToClick = TileUtils.GetCellPosition(tilemap, clickPos);
 
-        selectionIndicator.transform.position = TileUtils.GetWorldCellPosition(tilemap, closestCell);
+        selectionIndicator.transform.position = TileUtils.GetWorldCellPosition(tilemap, closestCellToClick);
 
         if((!canMove || !isTurn) && selectionIndicator.activeSelf == true) { selectionIndicator.SetActive(false); }
         else if((canMove && isTurn) && selectionIndicator.activeSelf == false) { selectionIndicator.SetActive(true); }
 
-        if(MoveCheck(closestCell, movementRange, false))
+        if(MoveCheck(closestCellToClick, movementRange, false))
         {
             indicatorRenderer.color = positiveIndicator;
         }
@@ -123,14 +123,11 @@ public class PlayerMovement : MonoBehaviour
             // get clicked cell
             Debug.Log("Clicked at: " + clickPos);
 
-            // get clicked cell
-            Vector3Int cellPos = TileUtils.GetCellPosition(tilemap , clickPos);
-            TileBase clickedCell = tilemap.GetTile(cellPos);
 
             // check if the cell is within range
-            if (MoveCheck(cellPos, movementRange, true))
+            if (MoveCheck(closestCellToClick, movementRange, true))
             {
-                MoveToCell(cellPos);
+                MoveToCell(closestCellToClick);
                 isMoving = true;
             }
             else
@@ -151,10 +148,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public bool MoveCheck(Vector3Int _cellPos, int range, bool shouldAttack)
+    public bool MoveCheck(Vector3Int clickedCell, int range, bool shouldAttack)
     {
-        // cellPos is the selected cell
-        // _checkPos is the cell that is being checked
+        // clickedCell is the selected cell
+        // checkPos is the cell whos range is being checked
 
         bool state = false;
 
@@ -162,8 +159,8 @@ public class PlayerMovement : MonoBehaviour
         {
             for (var j = -range; j <= range; j++)
             {
-                Vector3Int _checkPos = new Vector3Int(currentTile.x + i, currentTile.y + j, 0); // get the cell that is being checked on if it is the selected cell
-                if (_cellPos == _checkPos)
+                Vector3Int checkPos = new Vector3Int(currentTile.x + i, currentTile.y + j, 0); // get the cell that is being checked on if it is the selected cell
+                if (clickedCell == checkPos)
                 {
                     state = true;
                 }
@@ -171,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //check if there are enemies or objects on the tile
-        Collider2D[] obstacles =  Physics2D.OverlapBoxAll(new Vector2(_cellPos.x + tilemap.cellSize.x / 2, _cellPos.y + tilemap.cellSize.y / 2), Vector2.one * 0.1f, obstaclesMask);
+        Collider2D[] obstacles =  Physics2D.OverlapBoxAll(new Vector2(clickedCell.x + tilemap.cellSize.x / 2, clickedCell.y + tilemap.cellSize.y / 2), Vector2.one * 0.1f, 0, obstaclesMask);
         //Debug.Log(obstacles.Length);
 
         // if there are obstacles
@@ -183,7 +180,12 @@ public class PlayerMovement : MonoBehaviour
             foreach (Collider2D obstacle in obstacles) 
             { 
                 // if the obstacle isn't an enemy
-                if(obstacle.gameObject.layer != 7) { continue; }
+                if(obstacle.gameObject.layer != 7) 
+                {
+                    ICollectable collectable = obstacle?.GetComponent<ICollectable>();
+                    collectable.Collect();
+                    continue;
+                }
 
                 playerCombat.DealDamage(obstacle.gameObject);
             }

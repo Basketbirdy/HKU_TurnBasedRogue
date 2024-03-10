@@ -9,6 +9,8 @@ public class EnemyBehaviour : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] internal Enemy enemyData;
+    [Space]
+    [SerializeField] ParticleSystem hitParticles;
     private EnemyFSM fsm;
     internal GameObject player;
     internal Tilemap tilemap; 
@@ -17,8 +19,9 @@ public class EnemyBehaviour : MonoBehaviour
 
     [Header("Enemy data")]
     [Header("Movement")]
-    [SerializeField] internal Vector3Int currentCell;
+    [SerializeField] internal Vector3Int currentTile;
     [SerializeField] internal Vector3Int targetCell;
+    [SerializeField] internal LayerMask playerMask;
 
     [Header("Combat")]
     public float damageMultiplier;
@@ -43,8 +46,8 @@ public class EnemyBehaviour : MonoBehaviour
         player = FindObjectOfType<PlayerMovement>().gameObject;
         tilemap = FindObjectOfType<Tilemap>();
 
-        currentCell = TileUtils.GetCellPosition(tilemap, transform.position);
-        targetCell = currentCell;
+        currentTile = TileUtils.GetCellPosition(tilemap, transform.position);
+        targetCell = currentTile;
         Debug.Log("enemyMovement; targetCell: " + targetCell);
 
         hp = enemyData.maxHp;
@@ -63,7 +66,6 @@ public class EnemyBehaviour : MonoBehaviour
         }
 
     }
-
 
     private void OnEnable()
     {
@@ -87,12 +89,14 @@ public class EnemyBehaviour : MonoBehaviour
         float actualDamage = damage - Mathf.RoundToInt(UnityEngine.Random.Range(0f, enemyData.baseDefense * defenseMultiplier));
 
         if (hp - actualDamage <= 0) { Die(); }
-        else { hp -= actualDamage; }
+        else { hp -= actualDamage; ParticleUtils.TriggerSystem(hitParticles, true); }
     }
 
     private void Die()
     {
         Debug.Log("Combat; " + gameObject.name + " Died");
+        ParticleUtils.DestroyAfterSeperation(hitParticles, true);
+
         TurnManager.instance.AdvanceTurn(1);
 
         Destroy(gameObject);
@@ -118,7 +122,7 @@ public class EnemyBehaviour : MonoBehaviour
             isTurn = false;
         }
 
-        currentCell = TileUtils.GetCellPosition(tilemap, transform.position);
+        currentTile = TileUtils.GetCellPosition(tilemap, transform.position);
 
         Debug.Log("Turns; triggered CheckTurn function");
     }

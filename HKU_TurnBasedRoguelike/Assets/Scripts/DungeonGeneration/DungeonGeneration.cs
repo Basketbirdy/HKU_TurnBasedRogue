@@ -26,6 +26,8 @@ public class DungeonGeneration : MonoBehaviour
     int gridSizeX, gridSizeY;
     [SerializeField] int roomwidth;
     [SerializeField] int roomheight;
+    [SerializeField] int cheeseAmount;
+    [SerializeField] int enemyAmount;
 
     [Header("Corridors")]
     [Header("Corridor data")]
@@ -38,6 +40,8 @@ public class DungeonGeneration : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [Header("Prefabs")]
     [SerializeField] private TilemapClass[] tileMapPrefabs;
+    [SerializeField] private GameObject cheeseCollectable;
+    [SerializeField] private GameObject enemyPrefab;
 
     [Header("Debug")]
     [SerializeField] GameObject debugRoom;
@@ -69,6 +73,39 @@ public class DungeonGeneration : MonoBehaviour
         DrawMap(); // draw the dungeon
 
         CreateCorridors();
+
+        // spawn obstacles and cheese
+        CreateObjects(cheeseCollectable, cheeseAmount);
+        CreateObjects(enemyPrefab, enemyAmount);
+    }
+
+    private void CreateObjects(GameObject prefab, int amount)
+    {
+        // for the amount of cheese to spawn
+        for(int i = 0; i < amount; i++)
+        {
+            // get random room to spawn object in
+            Vector2Int roomPos = takenPositions[Mathf.RoundToInt(UnityEngine.Random.value * (takenPositions.Count - 1))];
+
+            // get world position of the room
+            roomPos.x *= roomwidth + 1;
+            roomPos.y *= roomheight + 1;
+
+            // generate random offset within room bounds
+            Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-(roomwidth / 2 - 2), roomwidth / 2 - 1),
+                                               UnityEngine.Random.Range(-(roomheight / 2 - 2), roomheight / 2 - 1));
+
+            // get world position
+            Vector2 spawnPos = roomPos + randomOffset;
+
+            // convert world position to cell position
+            Vector3Int spawnCellPos = TileUtils.GetCellPosition(tilemap, spawnPos);
+            //convert cell position into worldposition
+            Vector3 finalSpawnPos = TileUtils.GetWorldCellPosition(tilemap, spawnCellPos);
+
+            // spawn cheese
+            Instantiate(prefab, finalSpawnPos, quaternion.identity);
+        }
     }
 
     private void CreateRooms()
