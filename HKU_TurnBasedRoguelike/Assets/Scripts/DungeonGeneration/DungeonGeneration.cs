@@ -35,6 +35,7 @@ public class DungeonGeneration : MonoBehaviour
     [SerializeField] int horCorridorHeight = 4;
     [SerializeField] int verCorridorWidth = 4;
     [SerializeField] int verCorridorHeight = 3;
+    [SerializeField] List<Corridor> allCorridors;
 
     [Header("Tilemaps")]
     [SerializeField] private Tilemap tilemap;
@@ -64,9 +65,9 @@ public class DungeonGeneration : MonoBehaviour
 
         Debug.Log(rooms.Length);
 
-        SpawnFinalChamber();
-
         SpawnShopChamber();
+
+        SpawnFinalChamber();
 
         SetRoomDoors(); // set the door states of each room
 
@@ -292,6 +293,7 @@ public class DungeonGeneration : MonoBehaviour
             // Spawn the room 
             DrawPrefab(drawPos, room.type.ToString());
 
+            Debug.Log("Drew a room at: " + room.gridPos.x + ", " + room.gridPos.y);
         }
     }
 
@@ -335,30 +337,30 @@ public class DungeonGeneration : MonoBehaviour
         {
             //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            offset = new Vector3Int((room.width / 2) + 1,(room.height / 2) + 1, 0);
+            offset = new Vector3Int(0, room.height);
         }
         if (direction == Corridor.Direction.east)
         {
             //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
+            offset = new Vector3Int(room.width, 0);
         }
         if (direction == Corridor.Direction.south)
         {
             //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
+            offset = new Vector3Int(0, -room.height);
         }
         if (direction == Corridor.Direction.west)
         {
             //offset = Vector3Int.zero;
             //offset = new Vector3Int(room.gridPos.x * room.width, room.gridPos.y * room.height);
-            offset = new Vector3Int((room.width / 2) + 1, (room.height / 2) + 1, 0);
+            offset = new Vector3Int(-room.width, 0);
         }
 
-        Vector3Int roomWorldPos = new Vector3Int(roomPos.x * room.width, roomPos.y * room.height, 0);
+        Vector3Int roomWorldPos = new Vector3Int(roomPos.x * room.width + roomPos.x, roomPos.y * room.height + roomPos.y, 0);
 
-        Vector3Int drawPos = roomWorldPos + offset;
+        Vector3Int drawPos = roomWorldPos;
 
         //drawPos.x *= room.width;
         //drawPos.y *= room.height;
@@ -396,13 +398,20 @@ public class DungeonGeneration : MonoBehaviour
 
     public void CreateCorridors()
     {
-        foreach (Room room in rooms)
+        foreach (Vector2Int pos in takenPositions)
         {
+            int roomXPos = GetRoomPositionFromTakenPosition(pos).x;
+            int roomYPos = GetRoomPositionFromTakenPosition(pos).y;
+
+            Room room = rooms[roomXPos, roomYPos];
+
             if (room == null)
             {
-                //Debug.Log("room is null");
+                Debug.Log("room is null");
                 continue;
             }
+
+            //Debug.Log("Doors; N: " + rooms[pos.x, pos.y].north + ", E: " + rooms[pos.x, pos.y].east + ", S: " + rooms[pos.x, pos.y].south + ", W: " + rooms[pos.x, pos.y].west);
 
             // get corridors
             List<Corridor> corridors = GetCorridors(room);
@@ -410,7 +419,7 @@ public class DungeonGeneration : MonoBehaviour
             foreach (Corridor corridor in corridors)
             {
                 // get room grid positions 
-                Vector3Int roomPos = new Vector3Int(room.gridPos.x, room.gridPos.y, 0);
+                Vector3Int roomPos = new Vector3Int(pos.x, pos.y, 0);//new Vector3Int(room.gridPos.x, room.gridPos.y, 0);
 
                 if (corridor.direction == Corridor.Direction.north)
                 {
@@ -434,7 +443,6 @@ public class DungeonGeneration : MonoBehaviour
 
     private List<Corridor> GetCorridors(Room _room)
     {
-        List<Corridor> allCorridors = new List<Corridor>();
 
         if (_room.north) // if the room has a corridor above
         { 
@@ -495,6 +503,7 @@ public class DungeonGeneration : MonoBehaviour
             Vector2Int pos = new Vector2Int(Mathf.RoundToInt(MathF.Abs(finalChamberPos.x)), Mathf.RoundToInt(MathF.Abs(finalChamberPos.y)));
 
             rooms[pos.x, pos.y] = new Room(finalChamberPos, Room.RoomType.end, 20, 10);
+            takenPositions.Insert(0, finalChamberPos);
             Debug.Log("final room position is: " + finalChamberPos.x + " , " + finalChamberPos.y);
         }
         else
@@ -541,12 +550,21 @@ public class DungeonGeneration : MonoBehaviour
         {
             Vector2Int pos = new Vector2Int(Mathf.RoundToInt(MathF.Abs(finalChamberPos.x)), Mathf.RoundToInt(MathF.Abs(finalChamberPos.y)));
 
+            if (takenPositions.Contains(pos)) { pos = new Vector2Int(Mathf.RoundToInt(MathF.Abs(finalChamberPos.x)), Mathf.RoundToInt(MathF.Abs(finalChamberPos.y))); }
+
             rooms[pos.x, pos.y] = new Room(finalChamberPos, Room.RoomType.shop, 20, 10);
-            Debug.Log("final room position is: " + finalChamberPos.x + " , " + finalChamberPos.y);
+            takenPositions.Insert(0, finalChamberPos);
+            Debug.Log("shop position is: " + finalChamberPos.x + " , " + finalChamberPos.y);
         }
         else
         {
             Debug.LogWarning("No final chamber position found");
         }
+    }
+
+    private Vector2Int GetRoomPositionFromTakenPosition(Vector2Int takenPos)
+    {
+        Vector2Int roomPos = new Vector2Int(takenPos.x + gridSizeX, takenPos.y + gridSizeY);
+        return roomPos;
     }
 }

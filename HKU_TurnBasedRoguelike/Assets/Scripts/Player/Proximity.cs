@@ -90,6 +90,7 @@ public class Proximity : MonoBehaviour
             if (!objectsInProximity.Contains(affectedObjects[i]) && affectedObjects[i] != null)
             {
                 TurnManager.instance.RemoveFromList(affectedObjects[i]);
+                i--;
                 Debug.Log("Turns; Removed an object from turnAffected list");
             }
         }

@@ -641,7 +641,7 @@ MonoBehaviour:
   cheeseNeeded: 1
   hasEnoughColor: {r: 0.13725491, g: 0.32941177, b: 0.16078432, a: 1}
   isPaused: 0
-  openMainMenu: 1
+  openMainMenu: 0
 --- !u!4 &325790445 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1298060658327231099, guid: 17ce1cf77b869534788608dfb3f8a3fd, type: 3}
@@ -2363,10 +2363,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8e4e88160b8e4c499f0e0e516fa7ab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldGridRadius: {x: 3, y: 3}
+  worldGridRadius: {x: 4, y: 4}
   randomCompareStart: 0.2
   randomCompareEnd: 0.01
-  roomAmount: 12
+  roomAmount: 8
   takenPositions: []
   roomwidth: 20
   roomheight: 10
@@ -2376,6 +2376,7 @@ MonoBehaviour:
   horCorridorHeight: 4
   verCorridorWidth: 4
   verCorridorHeight: 3
+  allCorridors: []
   tilemap: {fileID: 839910284}
   tileMapPrefabs:
   - name: Corridor_Horizontal
@@ -2687,7 +2688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8062468947921289876, guid: 6f79103e0e4788345ae628fc50e07e7f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
