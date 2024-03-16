@@ -71,7 +71,7 @@ public class PlayerCombat : MonoBehaviour
     {
         UpdateHealthBar();
         StartCoroutine(GameOverDelay(1));
-        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        gameObject.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
     }
 
     IEnumerator GameOverDelay(float delay)

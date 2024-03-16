@@ -9,6 +9,8 @@ public class EnemyAI : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Enemy enemyData;
+    [SerializeField] Animator animator;
+    [SerializeField] SpriteRenderer spriteRenderer;
     [Space]
     [SerializeField] ParticleSystem hitParticles;
     [Space]
@@ -75,8 +77,8 @@ public class EnemyAI : MonoBehaviour
                 {
                     // attack logic here
                     Debug.Log("EnemyAI; Attacked player");
-                    float damage = UnityEngine.Random.Range(enemyData.minDamage, enemyData.maxDamage) * damageMultiplier;
-                    playerCombat.TakeDamage(damage);
+                    animator.SetTrigger("Attack"); // DoDamage gets called in animation event
+                    
                 }
                 else
                 {
@@ -89,16 +91,27 @@ public class EnemyAI : MonoBehaviour
 
                     targetCell = TileUtils.GetWorldCellPosition(tilemap, currentTile + directionInt);
                     Debug.Log("EnemyAI; targetcell: " + targetCell);
+
+                    if(targetCell.x > transform.position.x)
+                    {
+                        spriteRenderer.flipX = true;
+                    }
+                    else
+                    {
+                        spriteRenderer.flipX = false;
+                    }
                 }
             }
 
             if(processingTurn && transform.position != TileUtils.GetWorldCellPosition(tilemap, Vector3Int.FloorToInt(targetCell)))
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetCell, enemyData.movementSpeed * Time.deltaTime);
+                animator.SetBool("isMoving", true);
             }
             else 
             {
                 processingTurn = false;
+                animator.SetBool("isMoving", false);
                 TurnManager.instance.AdvanceTurn(1);
             }
         }
@@ -109,6 +122,12 @@ public class EnemyAI : MonoBehaviour
         health = enemyData.maxHp;
         damageMultiplier = enemyData.damageMultiplier;
         defenseMultiplier = enemyData.defenseMultiplier;
+    }
+
+    public void DoDamage()
+    {
+        float damage = UnityEngine.Random.Range(enemyData.minDamage, enemyData.maxDamage) * damageMultiplier;
+        playerCombat.TakeDamage(damage);
     }
 
     private void CheckTurn()
