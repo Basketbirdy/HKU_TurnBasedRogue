@@ -2443,7 +2443,7 @@ MonoBehaviour:
   worldGridRadius: {x: 4, y: 4}
   randomCompareStart: 0.2
   randomCompareEnd: 0.01
-  roomAmount: 8
+  roomAmount: 12
   takenPositions: []
   roomwidth: 20
   roomheight: 10
