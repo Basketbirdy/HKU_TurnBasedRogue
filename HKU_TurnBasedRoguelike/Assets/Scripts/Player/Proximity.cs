@@ -82,9 +82,9 @@ public class Proximity : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < affectedObjects.Count; i ++)
+        for(int i = 0; i < affectedObjects.Count; i++)
         {
-            if (affectedObjects[i].layer == 6) {Debug.Log("Skipped player"); continue; }
+            if (affectedObjects[i].layer == 6) { Debug.Log("Skipped player"); continue; }
 
             // if an object in the affected list is not in range, remove the object from the list
             if (!objectsInProximity.Contains(affectedObjects[i]) && affectedObjects[i] != null)

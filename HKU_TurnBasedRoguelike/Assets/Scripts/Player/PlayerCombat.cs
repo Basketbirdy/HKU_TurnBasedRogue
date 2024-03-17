@@ -42,11 +42,11 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    public void DealDamage(GameObject enemyObj)
+    public void DealDamage(IDamagable damagable)
     {
-        enemyObj?.GetComponent<EnemyBehaviour>().TakeDamage(Mathf.RoundToInt(UnityEngine.Random.Range(minDamage * damageMultiplier , maxDamage * damageMultiplier)));
+        damagable.TakeDamage(Mathf.RoundToInt(UnityEngine.Random.Range(minDamage * damageMultiplier , maxDamage * damageMultiplier)));
 
-        Debug.Log("Combat; Dealt damage to: " + enemyObj.name); 
+        Debug.Log("Combat; Dealt damage to: " + damagable); 
 
         TurnManager.instance.AdvanceTurn(1);
     }

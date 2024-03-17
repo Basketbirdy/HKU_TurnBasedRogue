@@ -38,7 +38,8 @@ public class DungeonGeneration : MonoBehaviour
     [SerializeField] List<Corridor> allCorridors;
 
     [Header("Tilemaps")]
-    [SerializeField] private Tilemap tilemap;
+    [SerializeField] private Tilemap floorTilemap;
+    [SerializeField] private Tilemap wallTilemap;
     [Header("Prefabs")]
     [SerializeField] private TilemapClass[] tileMapPrefabs;
     [SerializeField] private GameObject cheeseCollectable;
@@ -100,9 +101,9 @@ public class DungeonGeneration : MonoBehaviour
             Vector2 spawnPos = roomPos + randomOffset;
 
             // convert world position to cell position
-            Vector3Int spawnCellPos = TileUtils.GetCellPosition(tilemap, spawnPos);
+            Vector3Int spawnCellPos = TileUtils.GetCellPosition(floorTilemap, spawnPos);
             //convert cell position into worldposition
-            Vector3 finalSpawnPos = TileUtils.GetWorldCellPosition(tilemap, spawnCellPos);
+            Vector3 finalSpawnPos = TileUtils.GetWorldCellPosition(floorTilemap, spawnCellPos);
 
             // spawn cheese
             Instantiate(prefab, finalSpawnPos, quaternion.identity);
@@ -314,17 +315,29 @@ public class DungeonGeneration : MonoBehaviour
             //Room currentRoom = new Room(position, _type, prefab.width, prefab.height); // create a new room
             //rooms.Add(currentRoom); // add room to the list of rooms
 
-            // get tiles to copy
-            prefab.tilemap.CompressBounds();
-            BoundsInt prefabBounds = prefab.tilemap.cellBounds;
-            TileBase[] tileArray = prefab.tilemap.GetTilesBlock(prefabBounds);
+            // get floor tiles to copy
+            prefab.floorTilemap.CompressBounds();
+            BoundsInt prefabBounds = prefab.floorTilemap.cellBounds;
+            TileBase[] tileArray = prefab.floorTilemap.GetTilesBlock(prefabBounds);
             //Debug.Log(tileArray.Length);
 
             // place copied tiles into the world
-            tilemap.CompressBounds();
+            floorTilemap.CompressBounds();
             Vector3Int tilemapPos = new Vector3Int(_gridPos.x + -(prefab.width / 2), _gridPos.y + -(prefab.height / 2), 0);
-            BoundsInt tilemapBounds = new BoundsInt(tilemapPos, prefab.tilemap.size);
-            tilemap.SetTilesBlock(tilemapBounds, tileArray);
+            BoundsInt tilemapBounds = new BoundsInt(tilemapPos, prefab.floorTilemap.size);
+            floorTilemap.SetTilesBlock(tilemapBounds, tileArray);
+
+            // get wall tiles to copy
+            prefab.wallTilemap.CompressBounds();
+            prefabBounds = prefab.wallTilemap.cellBounds;
+            tileArray = prefab.wallTilemap.GetTilesBlock(prefabBounds);
+            //Debug.Log(tileArray.Length);
+
+            // place copied tiles into the world
+            wallTilemap.CompressBounds();
+            tilemapPos = new Vector3Int(_gridPos.x + -((prefab.width + 4) / 2), _gridPos.y + -((prefab.height + 4) / 2), 0);
+            tilemapBounds = new BoundsInt(tilemapPos, prefab.wallTilemap.size);
+            wallTilemap.SetTilesBlock(tilemapBounds, tileArray);
 
             // place gameobjects in world
         }

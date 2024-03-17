@@ -15,8 +15,8 @@ public class Enemy : ScriptableObject
     public float movementSpeed = 8;
     [Header("Combat")]
     public int attackRange = 1;
-    public float minDamage = 60;
-    public float maxDamage = 120;
+    public bool needsCharge = false;
+    public float damage = 1f;
     public float damageMultiplier = 1f;
     [Space]
     public float maxHp = 100f;

@@ -76,15 +76,15 @@ public class DungeonGenerator : MonoBehaviour
             //rooms.Add(currentRoom); // add room to the list of rooms
 
             // get tiles to copy
-            prefab.tilemap.CompressBounds();
-            BoundsInt prefabBounds = prefab.tilemap.cellBounds;
-            TileBase[] tileArray = prefab.tilemap.GetTilesBlock(prefabBounds);
+            prefab.floorTilemap.CompressBounds();
+            BoundsInt prefabBounds = prefab.floorTilemap.cellBounds;
+            TileBase[] tileArray = prefab.floorTilemap.GetTilesBlock(prefabBounds);
             Debug.Log(tileArray.Length);
 
             // place copied tiles into the world
             tilemap.CompressBounds();
             Vector3Int tilemapPos = new Vector3Int(position.x + -(prefab.width/2), position.y + -(prefab.height / 2), 0);
-            BoundsInt tilemapBounds = new BoundsInt(tilemapPos, prefab.tilemap.size);
+            BoundsInt tilemapBounds = new BoundsInt(tilemapPos, prefab.floorTilemap.size);
             tilemap.SetTilesBlock(tilemapBounds, tileArray);
         }
     }

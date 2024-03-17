@@ -102,5 +102,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        TurnManager.instance.AdvanceTurn(1);
     }
 }

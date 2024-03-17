@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.GraphicsBuffer;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, IDamagable
 {
     [Header("References")]
     [SerializeField] Enemy enemyData;
@@ -13,6 +13,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] SpriteRenderer spriteRenderer;
     [Space]
     [SerializeField] ParticleSystem hitParticles;
+    [SerializeField] ParticleSystem[] chargeParticles;
+    [SerializeField] ParticleSystem chargedParticles;
     [Space]
     [SerializeField] GameObject player;
     private PlayerMovement playerMovement;
@@ -27,6 +29,8 @@ public class EnemyAI : MonoBehaviour
     [Space]
     [SerializeField] float damageMultiplier;
     [SerializeField] float defenseMultiplier;
+    [Space]
+    [SerializeField] bool isCharged = false;
 
     [Header("States")]
     [SerializeField] bool isTurn;
@@ -75,10 +79,26 @@ public class EnemyAI : MonoBehaviour
 
                 if(distance <= enemyData.attackRange)
                 {
-                    // attack logic here
-                    Debug.Log("EnemyAI; Attacked player");
-                    animator.SetTrigger("Attack"); // DoDamage gets called in animation event
-                    
+                    if (!enemyData.needsCharge)
+                    {
+                        MeleeAttack();
+                    }
+                    else
+                    {
+                        if (isCharged == true)
+                        {
+                            MeleeAttack();
+                            ParticleUtils.TriggerSystem(chargedParticles, false);
+                        }
+                        else
+                        {
+                            isCharged = true;
+
+                            // charge particles
+                            ParticleUtils.TriggerMultiple(chargeParticles, true);
+                            ParticleUtils.TriggerSystem(chargedParticles, true);
+                        }
+                    }
                 }
                 else
                 {
@@ -108,13 +128,21 @@ public class EnemyAI : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, targetCell, enemyData.movementSpeed * Time.deltaTime);
                 animator.SetBool("isMoving", true);
             }
-            else 
+            else if (processingTurn && transform.position == TileUtils.GetWorldCellPosition(tilemap, Vector3Int.FloorToInt(targetCell)))
             {
                 processingTurn = false;
                 animator.SetBool("isMoving", false);
                 TurnManager.instance.AdvanceTurn(1);
             }
         }
+    }
+
+    public void MeleeAttack()
+    {
+        // attack logic here
+        Debug.Log("EnemyAI; Attacked player");
+        animator.SetTrigger("Attack"); // DoDamage gets called in animation event
+        isCharged = false;
     }
 
     private void EnemyStatsSetup()
@@ -126,7 +154,7 @@ public class EnemyAI : MonoBehaviour
 
     public void DoDamage()
     {
-        float damage = UnityEngine.Random.Range(enemyData.minDamage, enemyData.maxDamage) * damageMultiplier;
+        float damage = enemyData.damage * damageMultiplier;
         playerCombat.TakeDamage(damage);
     }
 
@@ -153,5 +181,25 @@ public class EnemyAI : MonoBehaviour
         currentTile = TileUtils.GetCellPosition(tilemap, transform.position);
 
         Debug.Log("Turns; triggered CheckTurn function");
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log("Combat; " + gameObject.name + " Took " + damage + " damage");
+        // calculate damage
+        float actualDamage = damage - Mathf.RoundToInt(UnityEngine.Random.Range(0f, enemyData.baseDefense * defenseMultiplier));
+
+        if (health - actualDamage <= 0) { Die(); }
+        else { health -= actualDamage; ParticleUtils.TriggerSystem(hitParticles, true); }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Combat; " + gameObject.name + " Died");
+        ParticleUtils.DestroyAfterSeperation(hitParticles, true);
+
+        TurnManager.instance.AdvanceTurn(1);
+
+        Destroy(gameObject);
     }
 }

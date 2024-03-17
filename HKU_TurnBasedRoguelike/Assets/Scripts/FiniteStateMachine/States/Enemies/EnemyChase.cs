@@ -76,7 +76,7 @@ public class EnemyChase : State<EnemyBehaviour>
 
     private void AttackPlayer()
     {
-        float damage = UnityEngine.Random.Range(fsm.owner.enemyData.minDamage, fsm.owner.enemyData.maxDamage) * fsm.owner.damageMultiplier;
+        float damage = fsm.owner.enemyData.damage * fsm.owner.damageMultiplier;
         fsm.owner.player.GetComponent<PlayerCombat>().TakeDamage(damage);
     }
 

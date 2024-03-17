@@ -7,7 +7,8 @@ using UnityEngine.Tilemaps;
 public class TilemapClass
 {
     public string name;
-    public Tilemap tilemap;
+    public Tilemap floorTilemap;
+    public Tilemap wallTilemap;
 
     public int width;
     public int height;

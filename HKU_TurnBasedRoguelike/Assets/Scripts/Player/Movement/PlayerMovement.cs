@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] int movementRange = 2;
 
     [SerializeField] LayerMask obstaclesMask;
+    [SerializeField] LayerMask wallMask;
 
     [Header("References")]
     [SerializeField] Tilemap tilemap;
@@ -148,12 +149,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public bool MoveCheck(Vector3Int clickedCell, int range, bool shouldAttack)
+    public bool MoveCheck(Vector3Int clickedCell, int range, bool shouldMove)
     {
         // clickedCell is the selected cell
         // checkPos is the cell whos range is being checked
 
         bool state = false;
+        bool inAttackRange = false;
 
         for (var i = -range; i <= range; i++)
         {
@@ -163,34 +165,39 @@ public class PlayerMovement : MonoBehaviour
                 if (clickedCell == checkPos)
                 {
                     state = true;
+                    inAttackRange = true;
                 }
             }
         }
 
+        if (!shouldMove) { return state; }  
+
         //check if there are enemies or objects on the tile
-        Collider2D[] obstacles =  Physics2D.OverlapBoxAll(new Vector2(clickedCell.x + tilemap.cellSize.x / 2, clickedCell.y + tilemap.cellSize.y / 2), Vector2.one * 0.1f, 0, obstaclesMask);
-        //Debug.Log(obstacles.Length);
+        //Collider2D[] obstacles =  Physics2D.OverlapPointAll(new Vector2(clickedCell.x + tilemap.cellSize.x / 2, clickedCell.y + tilemap.cellSize.y / 2), /* Vector2.one * 1.1f ,*/ 0, obstaclesMask);
+        Collider2D[] obstacles =  Physics2D.OverlapPointAll(new Vector2(clickedCell.x + 0.5f, clickedCell.y + 0.5f));
+        Debug.Log("OverlapBox; obstacles length: " + obstacles.Length);
 
         // if there are obstacles
         if(obstacles.Length != 0) 
         { 
             state = false;
 
-            if (!shouldAttack) { return state; }
+
             foreach (Collider2D obstacle in obstacles) 
             { 
                 // if the obstacle isn't an enemy
                 if(obstacle.gameObject.layer != 7) 
                 {
                     ICollectable collectable = obstacle?.GetComponent<ICollectable>();
-                    collectable.Collect();
+                    if (collectable != null) { collectable.Collect(); }
                     continue;
                 }
 
-                playerCombat.DealDamage(obstacle.gameObject);
+                IDamagable damagable = obstacle?.GetComponent<IDamagable>();
+
+                if(damagable != null && inAttackRange) { playerCombat.DealDamage(damagable); }
             }
         }
-
 
         return state;
     }
