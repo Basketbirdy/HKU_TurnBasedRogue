@@ -1004,7 +1004,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.07, z: 0}
-  m_LocalScale: {x: 1.716, y: 1.716, z: 1.716}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1744002094}
@@ -1050,12 +1050,12 @@ SpriteRenderer:
   m_SortingLayerID: -2110966109
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0e07c891b1b22ae4cb5c1e7cd583cc97, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.46, y: 0.51}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1936,7 +1936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4431905134331920125, guid: 779167e19d408424ea438b77a95faaaf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 235
+      value: 235.5
       objectReference: {fileID: 0}
     - target: {fileID: 4431905134331920125, guid: 779167e19d408424ea438b77a95faaaf, type: 3}
       propertyPath: m_LocalPosition.y
@@ -31378,6 +31378,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 441007151649851280, guid: c3d68a721f3209444adfbe533c310fc3, type: 3}
+      propertyPath: m_text
+      value: Debt repaid
+      objectReference: {fileID: 0}
+    - target: {fileID: 441007151649851280, guid: c3d68a721f3209444adfbe533c310fc3, type: 3}
+      propertyPath: m_wordSpacing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2046999785351913344, guid: c3d68a721f3209444adfbe533c310fc3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -31404,7 +31412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5908664370171725106, guid: c3d68a721f3209444adfbe533c310fc3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6109710686882592005, guid: c3d68a721f3209444adfbe533c310fc3, type: 3}
       propertyPath: m_Pivot.x
