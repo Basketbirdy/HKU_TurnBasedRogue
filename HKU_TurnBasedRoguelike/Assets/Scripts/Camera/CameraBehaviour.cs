@@ -14,7 +14,7 @@ public class CameraBehaviour : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
-
+        targetPos = cam.transform.position;
     }
 
     // Update is called once per frame
@@ -35,7 +35,7 @@ public class CameraBehaviour : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.D) && !isMoving) { TransitionCamera(new Vector2 (1,0)); }
     }
 
-    private void TransitionCamera(Vector2 direction)
+    public void TransitionCamera(Vector2 direction)
     {
         Debug.Log("Camera; transitioning");
         isMoving = true;

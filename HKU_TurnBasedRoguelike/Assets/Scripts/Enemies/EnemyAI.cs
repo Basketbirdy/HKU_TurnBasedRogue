@@ -31,6 +31,8 @@ public class EnemyAI : MonoBehaviour, IDamagable
     [SerializeField] float defenseMultiplier;
     [Space]
     [SerializeField] bool isCharged = false;
+    [SerializeField] int maxChargedCount = 3;
+    [SerializeField] int chargedCount = 0;
 
     [Header("States")]
     [SerializeField] bool isTurn;
@@ -88,6 +90,7 @@ public class EnemyAI : MonoBehaviour, IDamagable
                         if (isCharged == true)
                         {
                             MeleeAttack();
+                            chargedCount = 0;
                             ParticleUtils.TriggerSystem(chargedParticles, false);
                         }
                         else
@@ -111,6 +114,12 @@ public class EnemyAI : MonoBehaviour, IDamagable
 
                     targetCell = TileUtils.GetWorldCellPosition(tilemap, currentTile + directionInt);
                     Debug.Log("EnemyAI; targetcell: " + targetCell);
+
+                    if (isCharged)
+                    {
+                        if(chargedCount < maxChargedCount) { chargedCount++; }
+                        else { isCharged = false; chargedCount = 0; ParticleUtils.TriggerSystem(chargedParticles, false); }
+                    }
 
                     if(targetCell.x > transform.position.x)
                     {

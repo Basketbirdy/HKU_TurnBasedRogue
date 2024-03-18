@@ -19,7 +19,8 @@ public class DungeonGeneration : MonoBehaviour
     [Header("Data")]
     [Header("Rooms")]
     [SerializeField] Room[,] rooms;
-    [SerializeField] int roomAmount = 12; 
+    [SerializeField] int roomAmount = 12;
+    private Vector2Int finalRoomPos;
 
     [Header("Room data")]
     [SerializeField] List<Vector2Int> takenPositions;
@@ -28,6 +29,7 @@ public class DungeonGeneration : MonoBehaviour
     [SerializeField] int roomheight;
     [SerializeField] int cheeseAmount;
     [SerializeField] int enemyAmount;
+    [SerializeField] int darkEnemyAmount;
 
     [Header("Corridors")]
     [Header("Corridor data")]
@@ -44,6 +46,8 @@ public class DungeonGeneration : MonoBehaviour
     [SerializeField] private TilemapClass[] tileMapPrefabs;
     [SerializeField] private GameObject cheeseCollectable;
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject darkEnemyPrefab;
+    [SerializeField] private GameObject exitPrefab;
 
     [Header("Debug")]
     [SerializeField] GameObject debugRoom;
@@ -66,9 +70,10 @@ public class DungeonGeneration : MonoBehaviour
 
         Debug.Log(rooms.Length);
 
-        //CreateShopChamber();
-
+        // create the final chamber
         CreateFinalChamber();
+        // create the exit in final chamber
+        CreateObjectInSpecifiedRoom(1, exitPrefab, finalRoomPos, false);
 
         DrawMap(); // draw the dungeon
 
@@ -79,11 +84,12 @@ public class DungeonGeneration : MonoBehaviour
         // spawn obstacles and cheese
         CreateObjects(cheeseCollectable, cheeseAmount);
         CreateObjects(enemyPrefab, enemyAmount);
+        CreateObjects(darkEnemyPrefab, darkEnemyAmount);
     }
 
     private void CreateObjects(GameObject prefab, int amount)
     {
-        // for the amount of cheese to spawn
+        // for the amount of objects to spawn
         for(int i = 0; i < amount; i++)
         {
             // get random room to spawn object in
@@ -105,8 +111,40 @@ public class DungeonGeneration : MonoBehaviour
             //convert cell position into worldposition
             Vector3 finalSpawnPos = TileUtils.GetWorldCellPosition(floorTilemap, spawnCellPos);
 
-            // spawn cheese
+            // spawn object
             Instantiate(prefab, finalSpawnPos, quaternion.identity);
+        }
+    }
+
+    private void CreateObjectInSpecifiedRoom(int amount, GameObject prefab, Vector2Int takenPos, bool randomisePosition)
+    {
+        // for the amount of objects to spawn
+        for (int i = 0; i < amount; i++)
+        {
+            // get random room to spawn object in
+            Vector2Int roomPos = takenPos;
+
+            // get world position of the room
+            roomPos.x *= roomwidth + 1;
+            roomPos.y *= roomheight + 1;
+
+            Vector2 offset;
+            // generate offset
+            if (randomisePosition)
+            {
+                offset = new Vector2(UnityEngine.Random.Range(-(roomwidth / 2 - 2), roomwidth / 2 - 1),
+                                     UnityEngine.Random.Range(-(roomheight / 2 - 2), roomheight / 2 - 1));
+            }
+            else { offset = Vector2.zero; }
+ 
+            // get world position
+            Vector2 spawnPos = roomPos + offset;
+
+            // convert world position to cell position
+            Vector3Int spawnCellPos = TileUtils.GetCellPosition(floorTilemap, spawnPos);
+
+            // spawn object
+            Instantiate(prefab, spawnCellPos, quaternion.identity);
         }
     }
 
@@ -462,6 +500,7 @@ public class DungeonGeneration : MonoBehaviour
             rooms[finalChamberPos.x + gridSizeX, finalChamberPos.y + gridSizeY] = new Room(finalChamberPos, Room.RoomType.end, 20, 10);
             takenPositions.Insert(0, finalChamberPos);
             Debug.Log("final room position is: " + finalChamberPos.x + " , " + finalChamberPos.y);
+            finalRoomPos = finalChamberPos;
         }
         else
         {

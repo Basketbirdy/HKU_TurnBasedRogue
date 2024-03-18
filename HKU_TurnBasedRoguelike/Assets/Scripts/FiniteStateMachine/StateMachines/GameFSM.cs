@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class GameFSM : FSM<GameManager>
 {
@@ -14,5 +15,6 @@ public class GameFSM : FSM<GameManager>
         states.Add(typeof(PlayingState), new PlayingState(this));
         states.Add(typeof(PauseState), new PauseState(this));
         states.Add(typeof(GameOverState), new GameOverState(this));
+        states.Add(typeof(WinState), new WinState(this));
     }
 }

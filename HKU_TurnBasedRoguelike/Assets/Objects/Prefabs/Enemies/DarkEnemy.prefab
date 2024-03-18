@@ -109,6 +109,8 @@ MonoBehaviour:
   damageMultiplier: 1
   defenseMultiplier: 1
   isCharged: 0
+  maxChargedCount: 5
+  chargedCount: 0
   isTurn: 0
   processingTurn: 0
   turnIndex: 0
@@ -520,7 +522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6577883834314453075, guid: f19b1235196d9ea4aaf072acd6619d8c, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6577883834314453075, guid: f19b1235196d9ea4aaf072acd6619d8c, type: 3}
       propertyPath: InitialModule.startLifetime.scalar

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,8 +18,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public UIObject[] uiObjects;
 
     [Header("Progression")]
-    [SerializeField] int cheeseCollected = 0;
-    [SerializeField] int cheeseNeeded = 4;
+    [SerializeField] public int cheeseCollected = 0;
+    [SerializeField] public int cheeseNeeded = 4;
     public Color hasEnoughColor;
 
     [Header("Debug")]
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public bool isPaused = false;
     [Header("Options")]
     [SerializeField] bool openMainMenu = true;
+    [SerializeField] bool startInTutorial = true;
 
     #region Singleton
 
@@ -50,6 +52,14 @@ public class GameManager : MonoBehaviour
 
         if (openMainMenu) { fsm.ChangeState(typeof(MainMenuState)); }
         else { fsm.ChangeState(typeof(PlayingState)); }
+
+        if (startInTutorial)
+        {
+            playerObj.transform.position = new Vector2(253.5f, .5f);
+            playerObj.GetComponent<PlayerMovement>().targetPos = new Vector2(253.5f, .5f);
+            playerObj.GetComponent<PlayerMovement>().currentTile = new Vector3Int(253, 0, 0);
+            Camera.main.transform.position = new Vector3(253, 0, -10);
+        }
     }
 
     // Update is called once per frame
@@ -69,6 +79,7 @@ public class GameManager : MonoBehaviour
     public void ResetGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        fsm.ChangeState(typeof(MainMenuState));
     }
 
     public void PauseGame()
@@ -80,6 +91,11 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         fsm.ChangeState(typeof(GameOverState));
+    }
+
+    public void WinGame()
+    {
+        fsm.ChangeState(typeof(WinState));
     }
 
     public void CollectCheese()

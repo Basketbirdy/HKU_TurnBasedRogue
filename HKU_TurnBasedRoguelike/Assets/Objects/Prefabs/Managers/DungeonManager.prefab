@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3928827508004067111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7285663709448093236}
+  - component: {fileID: 8356797708611033802}
+  m_Layer: 0
+  m_Name: DungeonManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7285663709448093236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3928827508004067111}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8356797708611033802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3928827508004067111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e4e88160b8e4c499f0e0e516fa7ab0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldGridRadius: {x: 4, y: 4}
+  randomCompareStart: 0.2
+  randomCompareEnd: 0.01
+  roomAmount: 12
+  takenPositions: []
+  roomwidth: 20
+  roomheight: 10
+  cheeseAmount: 12
+  enemyAmount: 8
+  darkEnemyAmount: 3
+  horCorridorWidth: 3
+  horCorridorHeight: 4
+  verCorridorWidth: 4
+  verCorridorHeight: 3
+  allCorridors: []
+  floorTilemap: {fileID: 0}
+  wallTilemap: {fileID: 0}
+  tileMapPrefabs:
+  - name: Corridor_Horizontal
+    floorTilemap: {fileID: 0}
+    wallTilemap: {fileID: 0}
+    width: 3
+    height: 2
+  - name: Corridor_Vertical
+    floorTilemap: {fileID: 0}
+    wallTilemap: {fileID: 0}
+    width: 2
+    height: 3
+  - name: empty
+    floorTilemap: {fileID: 8791021766326058885, guid: 7b327e48e60f9104b9cad75b6772149b, type: 3}
+    wallTilemap: {fileID: 0}
+    width: 18
+    height: 8
+  - name: start
+    floorTilemap: {fileID: 0}
+    wallTilemap: {fileID: 0}
+    width: 18
+    height: 8
+  - name: end
+    floorTilemap: {fileID: 0}
+    wallTilemap: {fileID: 0}
+    width: 18
+    height: 8
+  - name: shop
+    floorTilemap: {fileID: 0}
+    wallTilemap: {fileID: 0}
+    width: 18
+    height: 8
+  cheeseCollectable: {fileID: 3071049826382449321, guid: 3ffb004486f1701489da4f8e236afabe, type: 3}
+  enemyPrefab: {fileID: 8062468947921289876, guid: 6f79103e0e4788345ae628fc50e07e7f, type: 3}
+  darkEnemyPrefab: {fileID: 383210424155206790, guid: 779167e19d408424ea438b77a95faaaf, type: 3}
+  exitPrefab: {fileID: 1543877225762495559, guid: 24a17ce2d5e603f4aa42a68af3f4cc52, type: 3}
+  debugRoom: {fileID: 1543877225762495559, guid: 24a17ce2d5e603f4aa42a68af3f4cc52, type: 3}
+  spawnDebugCorridors: 1

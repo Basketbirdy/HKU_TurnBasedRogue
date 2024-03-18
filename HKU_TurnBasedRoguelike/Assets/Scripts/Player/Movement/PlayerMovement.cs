@@ -16,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask obstaclesMask;
     [SerializeField] LayerMask wallMask;
 
+    [SerializeField] Vector2Int[] cameraThresholds;
+
     [Header("References")]
     [SerializeField] Tilemap tilemap;
     [Header("Player")]
@@ -32,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("Debug")]
-    [SerializeField] Vector3Int currentTile;
+    [SerializeField] public Vector3Int currentTile;
     public Vector3 targetPos;
 
     [SerializeField] int turnIndex;
@@ -51,8 +53,7 @@ public class PlayerMovement : MonoBehaviour
         TurnManager.instance.AddToList(gameObject);
         turnIndex = TurnManager.instance.ReturnObjIndex(gameObject);
 
-        SnapToGrid(this.gameObject, 0, 0);
-        currentTile = Vector3Int.zero;
+        currentTile = TileUtils.GetCellPosition(tilemap, transform.position);
         targetPos = transform.position;
 
         CheckTurn();
@@ -124,11 +125,53 @@ public class PlayerMovement : MonoBehaviour
             // get clicked cell
             Debug.Log("Clicked at: " + clickPos);
 
-
             // check if the cell is within range
             if (MoveCheck(closestCellToClick, movementRange, true))
             {
+
                 MoveToCell(closestCellToClick);
+
+                // check if player crosses threshold to move camera
+                Debug.Log("Targetcell: " + TileUtils.GetCellPosition(tilemap, targetPos).x);
+                foreach(Vector2Int threshold in cameraThresholds)
+                {
+                    if (targetPos.y == transform.position.y && (TileUtils.GetCellPosition(tilemap, targetPos).y) == threshold.y) 
+                    { 
+                        break; 
+                    }
+
+                    if (targetPos.x == transform.position.x && (TileUtils.GetCellPosition(tilemap, targetPos).x) == threshold.x)
+                    {
+                        break;
+                    }
+
+                    if ((TileUtils.GetCellPosition(tilemap,targetPos).x) == threshold.x)
+                    {
+
+                        if (TileUtils.GetCellPosition(tilemap, targetPos).x > transform.position.x)
+                        {
+                            Camera.main.GetComponent<CameraBehaviour>().TransitionCamera(Vector2.right);
+                        }
+                        else
+                        {
+                            Camera.main.GetComponent<CameraBehaviour>().TransitionCamera(Vector2.left);
+                        }
+                    }
+
+                    if ((TileUtils.GetCellPosition(tilemap, targetPos).y) == threshold.y)
+                    {
+
+                        if (TileUtils.GetCellPosition(tilemap, targetPos).y > transform.position.y)
+                        {
+                            Camera.main.GetComponent<CameraBehaviour>().TransitionCamera(Vector2.up);
+                        }
+                        else
+                        {
+                            Camera.main.GetComponent<CameraBehaviour>().TransitionCamera(Vector2.down);
+                        }
+                    }
+                }
+
                 isMoving = true;
             }
             else
@@ -189,11 +232,19 @@ public class PlayerMovement : MonoBehaviour
                 if(obstacle.gameObject.layer != 7) 
                 {
                     ICollectable collectable = obstacle?.GetComponent<ICollectable>();
-                    if (collectable != null) { collectable.Collect(); }
+                    Debug.Log("Interactions; collectable: " + collectable);
+                    if (collectable != null && inAttackRange) { collectable.Collect(); }
+
+                    IInteractable interactable = obstacle?.GetComponent<IInteractable>();
+                    Debug.Log("Interactions; interactable: " + interactable);
+
+                    if (interactable != null && inAttackRange) { interactable.Interact(); }
+
                     continue;
                 }
 
                 IDamagable damagable = obstacle?.GetComponent<IDamagable>();
+                Debug.Log("Interactions; damagable: " + damagable);
 
                 if(damagable != null && inAttackRange) { playerCombat.DealDamage(damagable); }
             }
