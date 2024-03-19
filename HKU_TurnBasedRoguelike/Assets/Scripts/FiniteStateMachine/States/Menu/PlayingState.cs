@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,12 @@ public class PlayingState : State<GameManager>
 {
     GameFSM fsm;
 
+    public static event Action onStartPlaying;
+
     public PlayingState(GameFSM fsm) : base(fsm)
     {
         this.fsm = fsm;
-        
+        onStartPlaying?.Invoke();
     }
 
     public override void Enter()

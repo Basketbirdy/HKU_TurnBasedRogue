@@ -82,7 +82,7 @@ public class DungeonGeneration : MonoBehaviour
         CreateCorridors();
 
         // spawn obstacles and cheese
-        CreateObjects(cheeseCollectable, cheeseAmount);
+        CreateObjects(cheeseCollectable, GameManager.instance.cheeseNeeded + cheeseAmount);
         CreateObjects(enemyPrefab, enemyAmount);
         CreateObjects(darkEnemyPrefab, darkEnemyAmount);
     }

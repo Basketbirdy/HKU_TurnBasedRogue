@@ -29,10 +29,10 @@ public class CameraBehaviour : MonoBehaviour
             isMoving = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.W) && !isMoving) { TransitionCamera(new Vector2 (0,1)); }
-        if(Input.GetKeyDown(KeyCode.A) && !isMoving) { TransitionCamera(new Vector2 (-1,0)); }
-        if(Input.GetKeyDown(KeyCode.S) && !isMoving) { TransitionCamera(new Vector2 (0,-1)); }
-        if(Input.GetKeyDown(KeyCode.D) && !isMoving) { TransitionCamera(new Vector2 (1,0)); }
+        //if(Input.GetKeyDown(KeyCode.W) && !isMoving) { TransitionCamera(new Vector2 (0,1)); }
+        //if(Input.GetKeyDown(KeyCode.A) && !isMoving) { TransitionCamera(new Vector2 (-1,0)); }
+        //if(Input.GetKeyDown(KeyCode.S) && !isMoving) { TransitionCamera(new Vector2 (0,-1)); }
+        //if(Input.GetKeyDown(KeyCode.D) && !isMoving) { TransitionCamera(new Vector2 (1,0)); }
     }
 
     public void TransitionCamera(Vector2 direction)
@@ -43,9 +43,13 @@ public class CameraBehaviour : MonoBehaviour
         MoveCamera(targetPos);
     }
 
+    public void SetTargetPoint(Vector3 pos)
+    {
+        targetPos = pos;
+    }
+
     private void MoveCamera(Vector3 pos)
     {
         targetPos = pos;
-
     }
 }

@@ -95,6 +95,6 @@ MonoBehaviour:
   cheeseCollectable: {fileID: 3071049826382449321, guid: 3ffb004486f1701489da4f8e236afabe, type: 3}
   enemyPrefab: {fileID: 8062468947921289876, guid: 6f79103e0e4788345ae628fc50e07e7f, type: 3}
   darkEnemyPrefab: {fileID: 383210424155206790, guid: 779167e19d408424ea438b77a95faaaf, type: 3}
-  exitPrefab: {fileID: 1543877225762495559, guid: 24a17ce2d5e603f4aa42a68af3f4cc52, type: 3}
+  exitPrefab: {fileID: 3859529603008607653, guid: 4a8dd8fa88a7e1747bda25a4086692d6, type: 3}
   debugRoom: {fileID: 1543877225762495559, guid: 24a17ce2d5e603f4aa42a68af3f4cc52, type: 3}
   spawnDebugCorridors: 1

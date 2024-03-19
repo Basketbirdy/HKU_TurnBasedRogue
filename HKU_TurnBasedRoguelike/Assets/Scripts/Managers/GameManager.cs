@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Progression")]
     [SerializeField] public int cheeseCollected = 0;
-    [SerializeField] public int cheeseNeeded = 4;
+    [SerializeField] private int cheeseNeededOffsetRange = 3;
+    [SerializeField] public int cheeseNeeded = 12;
     public Color hasEnoughColor;
 
     [Header("Debug")]
@@ -38,12 +39,12 @@ public class GameManager : MonoBehaviour
         get { if (instance == null) { Debug.Log("TurnManager = null"); } return instance; }
     }
 
+    #endregion 
+
     private void Awake()
     {
         instance = this;
     }
-
-    #endregion 
 
     // Start is called before the first frame update
     void Start()
@@ -55,10 +56,11 @@ public class GameManager : MonoBehaviour
 
         if (startInTutorial)
         {
-            playerObj.transform.position = new Vector2(253.5f, .5f);
-            playerObj.GetComponent<PlayerMovement>().targetPos = new Vector2(253.5f, .5f);
-            playerObj.GetComponent<PlayerMovement>().currentTile = new Vector3Int(253, 0, 0);
-            Camera.main.transform.position = new Vector3(253, 0, -10);
+            cheeseNeeded = 7;
+        }
+        else
+        {
+            cheeseNeeded = Random.Range(cheeseNeeded - cheeseNeededOffsetRange, cheeseNeeded + cheeseNeededOffsetRange + 1);
         }
     }
 
@@ -71,8 +73,17 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape)) { PauseGame(); }
     }
 
-    public void StartGame()
+    public void StartGame(bool startTutorial)
     {
+        if(startTutorial) 
+        { 
+            startInTutorial = true;
+            playerObj.transform.position = new Vector2(253.5f, .5f);
+            playerObj.GetComponent<PlayerMovement>().targetPos = new Vector2(253.5f, .5f);
+            playerObj.GetComponent<PlayerMovement>().currentTile = new Vector3Int(253, 0, 0);
+            Camera.main.transform.position = new Vector3(253, 0, -10);
+            Camera.main?.GetComponent<CameraBehaviour>().SetTargetPoint(new Vector3(253, 0, -10));
+        }    
         fsm.ChangeState(typeof(PlayingState));
     }
 
@@ -85,7 +96,7 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         if(!isPaused) { fsm.ChangeState(typeof(PauseState)); }
-        else { StartGame(); }
+        else { StartGame(false); }
     }
 
     public void GameOver()
@@ -96,6 +107,12 @@ public class GameManager : MonoBehaviour
     public void WinGame()
     {
         fsm.ChangeState(typeof(WinState));
+    }
+
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     public void CollectCheese()

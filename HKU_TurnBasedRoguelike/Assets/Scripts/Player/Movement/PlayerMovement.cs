@@ -217,7 +217,10 @@ public class PlayerMovement : MonoBehaviour
 
         //check if there are enemies or objects on the tile
         //Collider2D[] obstacles =  Physics2D.OverlapPointAll(new Vector2(clickedCell.x + tilemap.cellSize.x / 2, clickedCell.y + tilemap.cellSize.y / 2), /* Vector2.one * 1.1f ,*/ 0, obstaclesMask);
-        Collider2D[] obstacles =  Physics2D.OverlapPointAll(new Vector2(clickedCell.x + 0.5f, clickedCell.y + 0.5f));
+        Collider2D[] obstacles =  Physics2D.OverlapPointAll(new Vector2(clickedCell.x + 0.5f, clickedCell.y + 0.5f), obstaclesMask);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(clickedCell.x + 0.5f, clickedCell.y + 0.5f) - new Vector2(transform.position.x, transform.position.y), obstaclesMask);
+        Debug.Log("OverlapPoint; x,y,x: " + clickedCell.x + "," + clickedCell.y + "," + clickedCell.z);
         Debug.Log("OverlapBox; obstacles length: " + obstacles.Length);
 
         // if there are obstacles

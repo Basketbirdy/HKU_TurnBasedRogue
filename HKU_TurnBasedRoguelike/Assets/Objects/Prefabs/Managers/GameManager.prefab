@@ -58,7 +58,9 @@ MonoBehaviour:
   - objName: WinScreen
     obj: {fileID: 0}
   cheeseCollected: 0
-  cheeseNeeded: 1
+  cheeseNeededOffsetRange: 3
+  cheeseNeeded: 12
   hasEnoughColor: {r: 0.13725491, g: 0.32941177, b: 0.16078432, a: 1}
   isPaused: 0
   openMainMenu: 0
+  startInTutorial: 1

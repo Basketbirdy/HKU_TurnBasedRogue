@@ -60,3 +60,6 @@ TagManager:
   - name: Particles
     uniqueID: 25234423
     locked: 0
+  - name: WorldSpaceUI
+    uniqueID: 1848649403
+    locked: 0

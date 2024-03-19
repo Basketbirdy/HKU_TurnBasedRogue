@@ -14,6 +14,16 @@ public class Exit : MonoBehaviour, IInteractable
     [SerializeField] int cheeseNeeded;
     [SerializeField] bool isOpen = false;
 
+    private void OnEnable()
+    {
+        PlayingState.onStartPlaying += UpdateUI;
+    }
+
+    private void OnDisable()
+    {
+        PlayingState.onStartPlaying -= UpdateUI;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +53,12 @@ public class Exit : MonoBehaviour, IInteractable
         {
             uiObj.SetActive(false);
         }
+    }
+
+    void UpdateUI()
+    {
+        cheeseNeeded = GameManager.instance.cheeseNeeded;
+        cheeseText.text = cheeseNeeded.ToString() + "x";
     }
 
     public void Interact()
