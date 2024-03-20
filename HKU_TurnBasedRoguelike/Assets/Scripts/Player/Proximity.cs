@@ -91,6 +91,7 @@ public class Proximity : MonoBehaviour
             {
                 TurnManager.instance.RemoveFromList(affectedObjects[i]);
                 i--;
+                TurnManager.instance.AdvanceTurn(0);
                 Debug.Log("Turns; Removed an object from turnAffected list");
             }
         }

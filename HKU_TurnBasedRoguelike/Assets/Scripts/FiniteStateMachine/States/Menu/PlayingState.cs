@@ -12,11 +12,12 @@ public class PlayingState : State<GameManager>
     public PlayingState(GameFSM fsm) : base(fsm)
     {
         this.fsm = fsm;
-        onStartPlaying?.Invoke();
     }
 
     public override void Enter()
     {
+        onStartPlaying?.Invoke();
+
         // enable ui
         UIUtils.DisableAll(fsm.owner.uiObjects); // disable all ui
         UIUtils.EnableSpecified(fsm.owner.uiObjects, "HUD");

@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            cheeseNeeded = Random.Range(cheeseNeeded - cheeseNeededOffsetRange, cheeseNeeded + cheeseNeededOffsetRange + 1);
+            
         }
     }
 
@@ -78,12 +78,20 @@ public class GameManager : MonoBehaviour
         if(startTutorial) 
         { 
             startInTutorial = true;
+            Debug.Log("Am i first??? --------------------- ");
+            cheeseNeeded = 7;
+
             playerObj.transform.position = new Vector2(253.5f, .5f);
             playerObj.GetComponent<PlayerMovement>().targetPos = new Vector2(253.5f, .5f);
             playerObj.GetComponent<PlayerMovement>().currentTile = new Vector3Int(253, 0, 0);
             Camera.main.transform.position = new Vector3(253, 0, -10);
             Camera.main?.GetComponent<CameraBehaviour>().SetTargetPoint(new Vector3(253, 0, -10));
-        }    
+        }
+        else
+        {
+            cheeseNeeded = Random.Range(cheeseNeeded - cheeseNeededOffsetRange, cheeseNeeded + cheeseNeededOffsetRange + 1);
+        }
+
         fsm.ChangeState(typeof(PlayingState));
     }
 

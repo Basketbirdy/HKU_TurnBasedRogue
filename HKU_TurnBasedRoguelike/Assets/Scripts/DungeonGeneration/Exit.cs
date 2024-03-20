@@ -27,8 +27,7 @@ public class Exit : MonoBehaviour, IInteractable
     // Start is called before the first frame update
     void Start()
     {
-        cheeseNeeded = GameManager.instance.cheeseNeeded;
-        cheeseText.text = cheeseNeeded.ToString() + "x";
+        UpdateUI();
     }
 
     // Update is called once per frame
@@ -57,8 +56,8 @@ public class Exit : MonoBehaviour, IInteractable
 
     void UpdateUI()
     {
-        cheeseNeeded = GameManager.instance.cheeseNeeded;
-        cheeseText.text = cheeseNeeded.ToString() + "x";
+        cheeseText.text = GameManager.instance.cheeseNeeded.ToString() + "x";
+        Debug.Log("ExitUI; cheeseText is: " + GameManager.instance.cheeseNeeded);
     }
 
     public void Interact()
@@ -70,7 +69,7 @@ public class Exit : MonoBehaviour, IInteractable
         }
 
         // check if the player has collected enough cheese
-        if(GameManager.instance.cheeseCollected < cheeseNeeded) 
+        if(GameManager.instance.cheeseCollected < GameManager.instance.cheeseNeeded) 
         {
             // if no, return with error and animation   
             animator.SetTrigger("Deny");

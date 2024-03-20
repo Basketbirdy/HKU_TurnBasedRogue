@@ -7,6 +7,9 @@ using UnityEngine.Tilemaps;
 
 public class EnemyBehaviour : MonoBehaviour
 {
+
+    // !!! IMPORTANT !!! THIS SCRIPT IS NOT USED ANYMORE - check EnemyAI for enemy behaviour
+
     [Header("References")]
     [SerializeField] internal Enemy enemyData;
     [Space]
@@ -36,6 +39,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     [Header("turn")]
     [SerializeField] internal List<GameObject> turnAffectedObjects;
+
+    // !!! IMPORTANT !!! THIS SCRIPT IS NOT USED ANYMORE - check EnemyAI for enemy behaviour
 
     // Start is called before the first frame update
     void Start()

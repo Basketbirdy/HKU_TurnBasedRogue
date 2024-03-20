@@ -8,6 +8,7 @@ public class PlayerCombat : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Proximity proximity;
+    [SerializeField] Animator playerAnim;
     [SerializeField] GameObject HUD;
     private Slider healthSlider;
     [Space]
@@ -45,6 +46,8 @@ public class PlayerCombat : MonoBehaviour
     public void DealDamage(IDamagable damagable)
     {
         damagable.TakeDamage(Mathf.RoundToInt(UnityEngine.Random.Range(minDamage * damageMultiplier , maxDamage * damageMultiplier)));
+
+        playerAnim.SetTrigger("Attack");
 
         Debug.Log("Combat; Dealt damage to: " + damagable); 
 

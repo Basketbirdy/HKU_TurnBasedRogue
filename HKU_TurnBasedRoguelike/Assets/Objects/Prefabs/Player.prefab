@@ -217,6 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   proximity: {fileID: 9009419997400170533}
+  playerAnim: {fileID: 8944145778684009227}
   HUD: {fileID: 0}
   hitParticles: {fileID: 4739861719753105694}
   maxHealth: 3
