@@ -100,6 +100,9 @@ MonoBehaviour:
   chargeParticles: []
   chargedParticles: {fileID: 0}
   player: {fileID: 0}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 384
   tilemap: {fileID: 0}
   health: 0
   currentTile: {x: 0, y: 0, z: 0}
@@ -107,6 +110,8 @@ MonoBehaviour:
   damageMultiplier: 1
   defenseMultiplier: 1
   isCharged: 0
+  maxChargedCount: 3
+  chargedCount: 0
   isTurn: 0
   processingTurn: 0
   turnIndex: 0

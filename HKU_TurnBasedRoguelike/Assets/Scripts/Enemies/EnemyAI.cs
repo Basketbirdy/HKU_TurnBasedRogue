@@ -19,7 +19,9 @@ public class EnemyAI : MonoBehaviour, IDamagable
     [SerializeField] GameObject player;
     private PlayerMovement playerMovement;
     private PlayerCombat playerCombat;
-
+    [Space]
+    [SerializeField] LayerMask obstacleMask;
+    [Space]
     [SerializeField] Tilemap tilemap;
 
     [Header("EnemyData")]
@@ -112,8 +114,20 @@ public class EnemyAI : MonoBehaviour, IDamagable
                     Vector3Int directionInt = Vector3Int.FloorToInt(direction);
                     Debug.Log("EnemyAI; direction: " + direction);
 
-                    targetCell = TileUtils.GetWorldCellPosition(tilemap, currentTile + directionInt);
-                    Debug.Log("EnemyAI; targetcell: " + targetCell);
+                    // check if there is anything on the target tile
+                    bool targetEmpty = Physics2D.OverlapPointAll(new Vector2(currentTile.x + directionInt.x + .5f, currentTile.y + directionInt.y + .5f), obstacleMask).Length == 0;
+                    Debug.Log("EnemyAI; target position empty: " + targetEmpty);
+
+                    if (targetEmpty)
+                    {
+                        targetCell = TileUtils.GetWorldCellPosition(tilemap, currentTile + directionInt);
+                        Debug.Log("EnemyAI; targetcell changed: " + targetCell);                    
+                    }
+                    else
+                    {
+                        TileUtils.GetWorldCellPosition(tilemap, currentTile);
+                        Debug.Log("EnemyAI; Enemy is obstructed, can not move");
+                    }
 
                     if (isCharged)
                     {

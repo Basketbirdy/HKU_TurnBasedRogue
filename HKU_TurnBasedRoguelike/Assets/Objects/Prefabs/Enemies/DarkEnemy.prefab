@@ -102,6 +102,9 @@ MonoBehaviour:
   - {fileID: 2838450405063802718}
   chargedParticles: {fileID: 200191952648292173}
   player: {fileID: 0}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 392
   tilemap: {fileID: 0}
   health: 0
   currentTile: {x: 0, y: 0, z: 0}
