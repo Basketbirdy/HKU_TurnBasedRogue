@@ -72,8 +72,6 @@ public class DungeonGeneration : MonoBehaviour
 
         // create the final chamber
         CreateFinalChamber();
-        // create the exit in final chamber
-        CreateObjectInSpecifiedRoom(1, exitPrefab, finalRoomPos, false);
 
         DrawMap(); // draw the dungeon
 
@@ -85,6 +83,8 @@ public class DungeonGeneration : MonoBehaviour
         CreateObjects(cheeseCollectable, GameManager.instance.cheeseNeeded + cheeseAmount);
         CreateObjects(enemyPrefab, enemyAmount);
         CreateObjects(darkEnemyPrefab, darkEnemyAmount);
+        // create the exit in final chamber
+        CreateObjectInSpecifiedRoom(1, exitPrefab, finalRoomPos, false);
     }
 
     private void CreateObjects(GameObject prefab, int amount)
@@ -152,9 +152,9 @@ public class DungeonGeneration : MonoBehaviour
     {
         rooms = new Room[gridSizeX * 2, gridSizeY * 2]; // Create room array according to grid size
 
-        rooms[gridSizeX, gridSizeY] = new Room(Vector2Int.zero, Room.RoomType.start, 20, 10); // create room at the center of the grid
-        takenPositions.Insert(0, Vector2Int.zero); // add room to occupancy list
-        Vector2Int checkPos = Vector2Int.zero; // create room to use as reference position while determining next room
+        rooms[gridSizeX, gridSizeY] = new Room(Vector2Int.zero, Room.RoomType.start, 20, 10);   // create room at the center of the grid
+        takenPositions.Insert(0, Vector2Int.zero);                                              // add room to occupancy list
+        Vector2Int checkPos = Vector2Int.zero;                                                  // create room to use as reference position while determining next room
 
         // create remaining rooms
         // Magic numbers
@@ -162,13 +162,13 @@ public class DungeonGeneration : MonoBehaviour
         // add rooms
         for (int i = 0; i < roomAmount - 1; i++)
         {
-            float randomPerc = ((float) i / (roomAmount - 1)); // Percentage of rooms that still need to be spawned
-            randomCompare = Mathf.Lerp(randomCompareStart, randomCompareEnd, randomPerc); // The more rooms already determined the less rooms branch out
+            float randomPerc = ((float) i / (roomAmount - 1));                              // Percentage of rooms that still need to be spawned
+            randomCompare = Mathf.Lerp(randomCompareStart, randomCompareEnd, randomPerc);   // The more rooms already determined the less rooms branch out
 
             checkPos = NewPosition();
 
             // Check for available positions
-            if (NumberOfNeighbors(checkPos, takenPositions) > 1 && UnityEngine.Random.value > randomCompare) // <--------- error in here !!! ( FIXED :D:D:D:D:D )
+            if (NumberOfNeighbors(checkPos, takenPositions) > 1 && UnityEngine.Random.value > randomCompare)
             {
                 int attempts = 0;
                 do
@@ -185,11 +185,6 @@ public class DungeonGeneration : MonoBehaviour
             // finalize position of the room
             rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY] = new Room(checkPos, Room.RoomType.empty, 20, 10);
             takenPositions.Insert(0,checkPos);
-
-            //Debug.Log("Rooms_Doors: North: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].north);
-            //Debug.Log("Rooms_Doors: East: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].east);
-            //Debug.Log("Rooms_Doors: South: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].south);
-            //Debug.Log("Rooms_Doors: West: " + rooms[checkPos.x + gridSizeX, checkPos.y + gridSizeY].west);
         }
     }
 
