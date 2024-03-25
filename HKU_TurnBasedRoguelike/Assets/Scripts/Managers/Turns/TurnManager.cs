@@ -63,7 +63,6 @@ public class TurnManager : MonoBehaviour
         }
 
         Debug.Log("Turns; Active index: " + activeIndex);
-
     }
 
     public void AddToList(GameObject obj)

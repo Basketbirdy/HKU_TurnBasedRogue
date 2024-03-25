@@ -79,6 +79,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    #region EventSetup
+
     private void OnEnable()
     {
         TurnManager.onAdvanceTurn += CheckTurn;
@@ -88,6 +90,8 @@ public class PlayerMovement : MonoBehaviour
     {
         TurnManager.onAdvanceTurn -= CheckTurn;   
     }
+
+    #endregion
 
     private void OnDrawGizmos()
     {
