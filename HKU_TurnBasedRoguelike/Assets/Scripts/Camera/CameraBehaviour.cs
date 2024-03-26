@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraBehaviour : MonoBehaviour
 {
@@ -17,6 +18,26 @@ public class CameraBehaviour : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         targetPos = cam.transform.position;
+
+        // get aspect ratio
+        float width = Screen.width;
+        Debug.Log("Camera; width is: " + width);
+        float height = Screen.height;
+        Debug.Log("Camera; height is: " + height);
+        float aspectFactor = width / height;
+        Debug.Log("Camera; aspectFactor is: " + aspectFactor);
+
+        if (aspectFactor > 1.7f && aspectFactor < 1.8f)
+        {
+            Debug.Log("Camera; Aspect ratio is 16:9");
+            cam.orthographicSize = 6f;
+        }
+        else
+        {
+            Debug.Log("Camera; Aspect ratio is not 16:9, zooming out");
+            cam.orthographicSize = 6.5f;
+        }
+
     }
 
     // Update is called once per frame
