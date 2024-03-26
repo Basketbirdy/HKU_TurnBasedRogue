@@ -33,15 +33,6 @@ public class PlayerCombat : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            TakeDamage(maxHealth/3 + 1);
-        }
-    }
-
     public void DealDamage(IDamagable damagable)
     {
         damagable.TakeDamage(Mathf.RoundToInt(UnityEngine.Random.Range(minDamage * damageMultiplier , maxDamage * damageMultiplier)));
@@ -76,6 +67,7 @@ public class PlayerCombat : MonoBehaviour
         gameObject.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
     }
 
+    // wait for a given duration before ending the game
     IEnumerator GameOverDelay(float delay)
     {
         yield return new WaitForSeconds(delay);

@@ -15,9 +15,9 @@ public class Room
     public int width; // Width of the room
     public int height; // Height of the room
 
-    public Vector2Int gridPos;
+    public Vector2Int gridPos; // position on grid
 
-    public bool north, east, south, west;
+    public bool north, east, south, west; // door positions
 
     public Room(Vector2Int _gridPos, RoomType _type, int _width, int _height)
     {

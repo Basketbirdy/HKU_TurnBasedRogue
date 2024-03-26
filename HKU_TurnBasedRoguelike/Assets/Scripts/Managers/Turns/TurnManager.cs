@@ -30,17 +30,6 @@ public class TurnManager : MonoBehaviour
 
     #endregion 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void AdvanceTurn(int amount)
     {
         Debug.Log("Turns; starting index: " + activeIndex);
@@ -88,11 +77,6 @@ public class TurnManager : MonoBehaviour
     public int ReturnActiveIndex()
     {
         return activeIndex;
-    }
-
-    public void inRangeOfPlayer()
-    {
-
     }
 }
 

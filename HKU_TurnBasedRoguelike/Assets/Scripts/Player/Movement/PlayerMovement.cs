@@ -32,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [SerializeField] ParticleSystem trailParticles;
 
-
     [Header("Debug")]
     [SerializeField] public Vector3Int currentTile;
     public Vector3 targetPos;
@@ -47,15 +46,14 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TurnManager.instance.AddToList(gameObject);
-        turnIndex = TurnManager.instance.ReturnObjIndex(gameObject);
+        TurnManager.instance.AddToList(gameObject);                             // add player to turn affected list
+        turnIndex = TurnManager.instance.ReturnObjIndex(gameObject);            // returns the index of this object in turn affected list
 
-        currentTile = TileUtils.GetCellPosition(tilemap, transform.position);
-        targetPos = transform.position;
+        currentTile = TileUtils.GetCellPosition(tilemap, transform.position);   // gets the current tile standing on
+        targetPos = transform.position;                                         
 
-        CheckTurn();
+        CheckTurn();                                                            // check wether or not it is this gameobjects turn
     }
-
 
     // Update is called once per frame
     void Update()
@@ -76,6 +74,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    #region EventSetup
+
     private void OnEnable()
     {
         TurnManager.onAdvanceTurn += CheckTurn;
@@ -86,15 +86,11 @@ public class PlayerMovement : MonoBehaviour
         TurnManager.onAdvanceTurn -= CheckTurn;   
     }
 
+    #endregion
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(targetPos, Vector3.one);
-    }
-
-    private void SnapToGrid(GameObject obj,  int x, int y)
-    {
-        Vector3 worldPos = tilemap.GetCellCenterWorld(new Vector3Int(x,y,0));
-        obj.transform.position = worldPos;
     }
 
     private void GetInput()
@@ -266,6 +262,12 @@ public class PlayerMovement : MonoBehaviour
         currentTile = targetTile;
     }
 
+    // gets the current cell position of the player
+    public Vector3Int GetCurrentCellPosition()
+    {
+        return currentTile;
+    }
+
     private void CheckTurn()
     {
         int currentIndex = TurnManager.instance.ReturnActiveIndex();
@@ -282,8 +284,4 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Turns; triggered CheckTurn function");
     }
 
-    public Vector3Int GetCurrentCellPosition()
-    {
-        return currentTile;
-    }
 }

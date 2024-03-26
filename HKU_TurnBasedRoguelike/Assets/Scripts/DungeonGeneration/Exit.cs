@@ -14,6 +14,8 @@ public class Exit : MonoBehaviour, IInteractable
     [SerializeField] int cheeseNeeded;
     [SerializeField] bool isOpen = false;
 
+    #region EventSetup
+
     private void OnEnable()
     {
         PlayingState.onStartPlaying += UpdateUI;
@@ -24,16 +26,12 @@ public class Exit : MonoBehaviour, IInteractable
         PlayingState.onStartPlaying -= UpdateUI;
     }
 
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {
         UpdateUI();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -83,20 +81,4 @@ public class Exit : MonoBehaviour, IInteractable
 
         isOpen = true;
     }
-
-
-    //IEnumerator Lerp(float lerpDuration, float startValue, float endValue)
-    //{
-    //    float timeElapsed = 0;
-
-    //    while (timeElapsed < lerpDuration)
-    //    {
-    //        valueToLerp = Mathf.Lerp(startValue, endValue, timeElapsed / lerpDuration);
-    //        timeElapsed += Time.deltaTime;
-
-    //        yield return null;
-    //    }
-
-    //    valueToLerp = endValue;
-    //}
 }

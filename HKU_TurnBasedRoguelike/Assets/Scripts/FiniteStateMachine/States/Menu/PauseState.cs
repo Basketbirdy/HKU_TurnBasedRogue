@@ -18,7 +18,6 @@ public class PauseState : State<GameManager>
         fsm.owner.playerMovement.canMove = false;
         fsm.owner.isPaused = true;
 
-
         // enable ui
         UIUtils.DisableAll(fsm.owner.uiObjects); // disable all ui
         UIUtils.EnableSpecified(fsm.owner.uiObjects, "Pause");

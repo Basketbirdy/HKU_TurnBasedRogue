@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public bool isPaused = false;
     [Header("Options")]
     [SerializeField] bool openMainMenu = true;
-    [SerializeField] bool startInTutorial = true;
 
     #region Singleton
 
@@ -53,15 +52,6 @@ public class GameManager : MonoBehaviour
 
         if (openMainMenu) { fsm.ChangeState(typeof(MainMenuState)); }
         else { fsm.ChangeState(typeof(PlayingState)); }
-
-        if (startInTutorial)
-        {
-            cheeseNeeded = 7;
-        }
-        else
-        {
-            
-        }
     }
 
     // Update is called once per frame
@@ -73,11 +63,12 @@ public class GameManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape)) { PauseGame(); }
     }
 
+    #region GameState functions
+
     public void StartGame(bool startTutorial)
     {
         if(startTutorial) 
         { 
-            startInTutorial = true;
             Debug.Log("Am i first??? --------------------- ");
             cheeseNeeded = 7;
 
@@ -122,6 +113,8 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    #endregion
 
     public void CollectCheese()
     {

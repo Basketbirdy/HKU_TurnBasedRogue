@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// This was a test script for finding an issue with overlappoint collision
+
 public class Test : MonoBehaviour
 {
     public Tilemap tilemap;

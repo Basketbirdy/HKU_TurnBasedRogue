@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    // This script is unused and abandoned, but i'm afraid to delete because I don't want to accidentaly delete the actual dungeon generation script. 
+    // !!! IMPORTANT !!! THIS SCRIPT IS NOT USED ANYMORE - check DungeonGeneration for the dungeon generation used
 
     [Header("Tilemaps")]
     [SerializeField] private Tilemap tilemap;

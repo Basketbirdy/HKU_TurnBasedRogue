@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// !!! IMPORTANT !!! THIS SCRIPT IS NOT USED ANYMORE - check EnemyAI for enemy behaviour
+
 public class EnemyIdle : State<EnemyBehaviour>
 {
     FSM<EnemyBehaviour> fsm;

@@ -21,6 +21,8 @@ public class Proximity : MonoBehaviour
     [SerializeField] List<GameObject> objectsInProximity;
     [SerializeField] List<GameObject> affectedObjects;
 
+    #region EventSetup
+
     private void OnEnable()
     {
         TurnManager.onAdvanceTurn += CheckProximity;
@@ -30,6 +32,8 @@ public class Proximity : MonoBehaviour
     {
         TurnManager.onAdvanceTurn -= CheckProximity;       
     }
+
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -84,6 +88,7 @@ public class Proximity : MonoBehaviour
 
         for(int i = 0; i < affectedObjects.Count; i++)
         {
+            // if the object is the player, skip it (player is always affected by turnmanager)
             if (affectedObjects[i].layer == 6) { Debug.Log("Skipped player"); continue; }
 
             // if an object in the affected list is not in range, remove the object from the list

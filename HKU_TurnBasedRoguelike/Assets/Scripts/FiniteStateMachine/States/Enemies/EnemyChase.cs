@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+
+// !!! IMPORTANT !!! THIS SCRIPT IS NOT USED ANYMORE - check EnemyAI for enemy behaviour
 
 public class EnemyChase : State<EnemyBehaviour>
 {

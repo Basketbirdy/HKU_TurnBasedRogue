@@ -160,6 +160,13 @@ public class EnemyAI : MonoBehaviour, IDamagable
         }
     }
 
+    private void EnemyStatsSetup()
+    {
+        health = enemyData.maxHp;
+        damageMultiplier = enemyData.damageMultiplier;
+        defenseMultiplier = enemyData.defenseMultiplier;
+    }
+
     public void MeleeAttack()
     {
         // attack logic here
@@ -168,12 +175,6 @@ public class EnemyAI : MonoBehaviour, IDamagable
         isCharged = false;
     }
 
-    private void EnemyStatsSetup()
-    {
-        health = enemyData.maxHp;
-        damageMultiplier = enemyData.damageMultiplier;
-        defenseMultiplier = enemyData.defenseMultiplier;
-    }
 
     public void DoDamage()
     {
@@ -181,6 +182,26 @@ public class EnemyAI : MonoBehaviour, IDamagable
         playerCombat.TakeDamage(damage);
     }
 
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log("Combat; " + gameObject.name + " Took " + damage + " damage");
+        // calculate damage
+        float actualDamage = damage - Mathf.RoundToInt(UnityEngine.Random.Range(0f, enemyData.baseDefense * defenseMultiplier));
+
+        if (health - actualDamage <= 0) { Die(); }
+        else { health -= actualDamage; ParticleUtils.TriggerSystem(hitParticles, true); }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Combat; " + gameObject.name + " Died");
+        ParticleUtils.DestroyAfterSeperation(hitParticles, true);
+
+        TurnManager.instance.AdvanceTurn(1);
+
+        Destroy(gameObject);
+    }
     private void CheckTurn()
     {
         if (!TurnManager.instance.GetList().Contains(gameObject))
@@ -204,25 +225,5 @@ public class EnemyAI : MonoBehaviour, IDamagable
         currentTile = TileUtils.GetCellPosition(tilemap, transform.position);
 
         Debug.Log("Turns; triggered CheckTurn function");
-    }
-
-    public void TakeDamage(float damage)
-    {
-        Debug.Log("Combat; " + gameObject.name + " Took " + damage + " damage");
-        // calculate damage
-        float actualDamage = damage - Mathf.RoundToInt(UnityEngine.Random.Range(0f, enemyData.baseDefense * defenseMultiplier));
-
-        if (health - actualDamage <= 0) { Die(); }
-        else { health -= actualDamage; ParticleUtils.TriggerSystem(hitParticles, true); }
-    }
-
-    private void Die()
-    {
-        Debug.Log("Combat; " + gameObject.name + " Died");
-        ParticleUtils.DestroyAfterSeperation(hitParticles, true);
-
-        TurnManager.instance.AdvanceTurn(1);
-
-        Destroy(gameObject);
     }
 }

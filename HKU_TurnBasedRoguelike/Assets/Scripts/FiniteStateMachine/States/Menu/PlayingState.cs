@@ -34,6 +34,7 @@ public class PlayingState : State<GameManager>
     }
 }
 
+// I left this in for future reference
 // Very basic generics use
 
 //public class test<T>
