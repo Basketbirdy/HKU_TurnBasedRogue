@@ -43,8 +43,6 @@ public class TurnManager : MonoBehaviour
 
     public void AdvanceTurn(int amount)
     {
-        onAdvanceTurn?.Invoke();
-
         Debug.Log("Turns; starting index: " + activeIndex);
         Debug.Log("Turns; turn affected objects: " + turnAffectedObj.Count);
 
@@ -64,6 +62,7 @@ public class TurnManager : MonoBehaviour
 
         Debug.Log("Turns; Active index: " + activeIndex);
 
+        onAdvanceTurn?.Invoke();
     }
 
     public void AddToList(GameObject obj)

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DestroyAfterLifeTime : MonoBehaviour
 {
+    // script to put on particle effects that need to last when parent object is destroyed - See ParticleUtils
+
     [SerializeField] bool destroyAfterLifeTime = false;
     float timer;
     [SerializeField] float lifeTime;
@@ -20,6 +22,7 @@ public class DestroyAfterLifeTime : MonoBehaviour
         if (Time.time > timer && timer != 0) { Destroy(gameObject); }
     }
 
+    // call in former-parent of particles to start timer
     public void DestroyAfterDelay(GameObject obj)
     {
         timer = Time.time + lifeTime;

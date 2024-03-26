@@ -44,9 +44,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] bool isTurn = false;
     [SerializeField] public bool canMove = true;
 
-    //[Header("Events")]
-    public static event Action crossedScreenThreshold;
-
     // Start is called before the first frame update
     void Start()
     {

@@ -33,10 +33,6 @@ public class DungeonGeneration : MonoBehaviour
 
     [Header("Corridors")]
     [Header("Corridor data")]
-    [SerializeField] int horCorridorWidth = 3;
-    [SerializeField] int horCorridorHeight = 4;
-    [SerializeField] int verCorridorWidth = 4;
-    [SerializeField] int verCorridorHeight = 3;
     [SerializeField] List<Corridor> allCorridors;
 
     [Header("Tilemaps")]

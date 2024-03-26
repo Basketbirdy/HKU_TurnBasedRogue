@@ -22,7 +22,6 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] float maxDamage = 120f;
     [Space]
     [SerializeField] float damageMultiplier = 1f;
-    [SerializeField] float defenseMultiplier = 1f;
 
     // events
     public static event Action onPlayerDeath;
