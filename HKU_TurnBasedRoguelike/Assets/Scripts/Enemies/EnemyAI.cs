@@ -33,7 +33,6 @@ public class EnemyAI : MonoBehaviour, IDamagable
     [SerializeField] float defenseMultiplier;
     [Space]
     [SerializeField] bool isCharged = false;
-    [SerializeField] int maxChargedCount = 3;
     [SerializeField] int chargedCount = 0;
 
     [Header("States")]
@@ -131,7 +130,7 @@ public class EnemyAI : MonoBehaviour, IDamagable
 
                     if (isCharged)
                     {
-                        if(chargedCount < maxChargedCount) { chargedCount++; }
+                        if(chargedCount < enemyData.maxChargedCount) { chargedCount++; }
                         else { isCharged = false; chargedCount = 0; ParticleUtils.TriggerSystem(chargedParticles, false); }
                     }
 
