@@ -113,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
             indicatorRenderer.color = negativeIndicator;
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && canMove && isTurn)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canMove && isTurn && !isMoving)
         {
             // get clicked cell
             Debug.Log("Clicked at: " + clickPos);
