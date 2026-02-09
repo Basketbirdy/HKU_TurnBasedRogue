@@ -16,6 +16,7 @@ public class Enemy : ScriptableObject
     [Header("Combat")]
     public int attackRange = 1;
     public bool needsCharge = false;
+    public int maxChargedCount = 3;
     public float damage = 1f;
     public float damageMultiplier = 1f;
     [Space]
