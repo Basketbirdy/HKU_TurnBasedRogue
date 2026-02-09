@@ -7608,10 +7608,22 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 204144547821861301, guid: 8d8d82950624e0349819420af1da7983, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058746131537156611, guid: 8d8d82950624e0349819420af1da7983, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2136991223239939203, guid: 8d8d82950624e0349819420af1da7983, type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2951925230123011306, guid: 8d8d82950624e0349819420af1da7983, type: 3}
       propertyPath: m_GeometryType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2951925230123011306, guid: 8d8d82950624e0349819420af1da7983, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2951925230123011306, guid: 8d8d82950624e0349819420af1da7983, type: 3}
